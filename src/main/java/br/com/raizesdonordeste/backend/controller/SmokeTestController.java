@@ -10,7 +10,7 @@ public class SmokeTestController {
 
     private static final Logger log = LoggerFactory.getLogger(SmokeTestController.class);
 
-    @GetMapping("/api/smoke")
+    @GetMapping("/smoke")
     public String smokeTest() {
         log.info("Endpoint de smoke test foi acionado");
         return "API Raízes do Nordeste funcionando!";
