@@ -15,5 +15,4 @@ public class SmokeTestController {
         log.info("Endpoint de smoke test foi acionado");
         return "API Raízes do Nordeste funcionando!";
     }
-   // Commit do git
 }
