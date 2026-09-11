@@ -5,10 +5,10 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class ClienteAtualizacaoRequest {
+public class UnidadeAtualizacaoRequest {
 
     private String nome;
-    private String cpf;
-    private String email;
-    private String telefone;
+    private String endereco;
+    private String cidade;
+    private String estado;
 }
