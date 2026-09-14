@@ -13,7 +13,8 @@ public class GlobalExceptionHandler {
             UnidadeNaoEncontradaException.class,
             ProdutoNaoEncontradoException.class,
             EstoqueNaoEncontradoException.class,
-            PedidoNaoEncontradoException.class
+            PedidoNaoEncontradoException.class,
+            PagamentoNaoEncontradoException.class
     })
     public ResponseEntity<String> tratarNaoEncontrado(RuntimeException exception) {
 
