@@ -22,3 +22,5 @@ public class GlobalExceptionHandler {
                 .body(exception.getMessage());
     }
 }
+
+
