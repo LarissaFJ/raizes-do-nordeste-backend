@@ -23,6 +23,17 @@ public class GlobalExceptionHandler {
                 .status(HttpStatus.NOT_FOUND)
                 .body(exception.getMessage());
     }
+
+    @ExceptionHandler({
+            EstoqueInsuficienteException.class,
+            PedidoJaConfirmadoException.class
+    })
+    public ResponseEntity<String> tratarConflito(RuntimeException exception) {
+
+        return ResponseEntity
+                .status(HttpStatus.CONFLICT)
+                .body(exception.getMessage());
+    }
 }
 
 

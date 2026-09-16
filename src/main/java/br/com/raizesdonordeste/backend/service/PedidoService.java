@@ -5,22 +5,29 @@ import br.com.raizesdonordeste.backend.dto.request.ItemPedidoRequest;
 import br.com.raizesdonordeste.backend.dto.request.PedidoAtualizacaoRequest;
 import br.com.raizesdonordeste.backend.dto.request.PedidoRequest;
 import br.com.raizesdonordeste.backend.dto.response.PedidoResponse;
+import br.com.raizesdonordeste.backend.entity.Estoque;
 import br.com.raizesdonordeste.backend.entity.ItemPedido;
 import br.com.raizesdonordeste.backend.entity.Pedido;
 import br.com.raizesdonordeste.backend.entity.Produto;
+import br.com.raizesdonordeste.backend.exception.EstoqueInsuficienteException;
+import br.com.raizesdonordeste.backend.exception.EstoqueNaoEncontradoException;
 import br.com.raizesdonordeste.backend.exception.PedidoNaoEncontradoException;
 import br.com.raizesdonordeste.backend.exception.ProdutoNaoEncontradoException;
+import br.com.raizesdonordeste.backend.repository.EstoqueRepository;
 import br.com.raizesdonordeste.backend.repository.ItemPedidoRepository;
 import br.com.raizesdonordeste.backend.repository.PedidoRepository;
 import br.com.raizesdonordeste.backend.repository.ProdutoRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
@@ -30,9 +37,34 @@ public class PedidoService {
     private final PedidoRepository pedidoRepository;
     private final ProdutoRepository produtoRepository;
     private final ItemPedidoRepository itemPedidoRepository;
+    private final EstoqueRepository estoqueRepository;
     private final AuditoriaService auditoriaService;
 
+    @Transactional
     public PedidoResponse cadastrar(PedidoRequest request) {
+
+        Map<Long, Integer> quantidadesPorProduto = new HashMap<>();
+
+        for (ItemPedidoRequest itemRequest : request.getItens()) {
+            produtoRepository.findById(itemRequest.getProdutoId())
+                    .orElseThrow(() ->
+                            new ProdutoNaoEncontradoException("Produto não encontrado"));
+
+            quantidadesPorProduto.merge(
+                    itemRequest.getProdutoId(), itemRequest.getQuantidade(), Integer::sum);
+        }
+
+        for (Map.Entry<Long, Integer> item : quantidadesPorProduto.entrySet()) {
+            Estoque estoque = estoqueRepository
+                    .findByUnidadeIdAndProdutoId(request.getUnidadeId(), item.getKey())
+                    .orElseThrow(() -> new EstoqueNaoEncontradoException(
+                            "Estoque não encontrado para o produto " + item.getKey()));
+
+            if (estoque.getQuantidade() < item.getValue()) {
+                throw new EstoqueInsuficienteException(
+                        "Estoque insuficiente para o produto " + item.getKey());
+            }
+        }
 
         Pedido pedido = Pedido.builder()
                 .clienteId(request.getClienteId())
