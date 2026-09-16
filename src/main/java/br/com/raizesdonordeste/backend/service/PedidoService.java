@@ -1,5 +1,6 @@
 package br.com.raizesdonordeste.backend.service;
 
+import br.com.raizesdonordeste.backend.dto.request.AuditoriaRequest;
 import br.com.raizesdonordeste.backend.dto.request.ItemPedidoRequest;
 import br.com.raizesdonordeste.backend.dto.request.PedidoAtualizacaoRequest;
 import br.com.raizesdonordeste.backend.dto.request.PedidoRequest;
@@ -29,6 +30,7 @@ public class PedidoService {
     private final PedidoRepository pedidoRepository;
     private final ProdutoRepository produtoRepository;
     private final ItemPedidoRepository itemPedidoRepository;
+    private final AuditoriaService auditoriaService;
 
     public PedidoResponse cadastrar(PedidoRequest request) {
 
@@ -116,6 +118,12 @@ public class PedidoService {
                 .orElseThrow(() ->
                         new PedidoNaoEncontradoException("Pedido não encontrado"));
 
+        BigDecimal descontoAntigo = pedido.getDesconto() != null
+                ? pedido.getDesconto()
+                : BigDecimal.ZERO;
+
+        String statusAntigo = pedido.getStatusPedido();
+
         if (request.getUnidadeId() != null) {
             pedido.setUnidadeId(request.getUnidadeId());
         }
@@ -125,11 +133,59 @@ public class PedidoService {
         }
 
         if (request.getStatusPedido() != null) {
+
             pedido.setStatusPedido(request.getStatusPedido());
+
+            if (!request.getStatusPedido().equals(statusAntigo)
+                    && request.getStatusPedido().equals("CANCELADO")) {
+
+                AuditoriaRequest auditoriaRequest = new AuditoriaRequest();
+
+                auditoriaRequest.setPedidoId(id);
+                auditoriaRequest.setTipoOperacao("CANCELAMENTO");
+                auditoriaRequest.setDescricao("Pedido cancelado");
+
+                auditoriaService.registrar(auditoriaRequest);
+            }
         }
 
         if (request.getDesconto() != null) {
-            pedido.setDesconto(request.getDesconto());
+
+            BigDecimal novoDesconto = request.getDesconto();
+
+            pedido.setDesconto(novoDesconto);
+
+            List<ItemPedido> itens = itemPedidoRepository.findByPedidoId(id);
+
+            BigDecimal subtotal = BigDecimal.ZERO;
+
+            for (ItemPedido item : itens) {
+
+                BigDecimal valorItem = item.getPrecoUnitario()
+                        .multiply(BigDecimal.valueOf(item.getQuantidade()));
+
+                subtotal = subtotal.add(valorItem);
+            }
+
+            BigDecimal valorTotal = subtotal.subtract(novoDesconto);
+
+            pedido.setValorTotal(valorTotal);
+
+            if (!novoDesconto.equals(descontoAntigo)) {
+
+                AuditoriaRequest auditoriaRequest = new AuditoriaRequest();
+
+                auditoriaRequest.setPedidoId(id);
+                auditoriaRequest.setTipoOperacao("ALTERACAO_DESCONTO");
+                auditoriaRequest.setDescricao(
+                        "Desconto alterado de "
+                                + descontoAntigo
+                                + " para "
+                                + novoDesconto
+                );
+
+                auditoriaService.registrar(auditoriaRequest);
+            }
         }
 
         Pedido pedidoAtualizado = pedidoRepository.save(pedido);

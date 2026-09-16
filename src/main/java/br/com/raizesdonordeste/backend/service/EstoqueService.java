@@ -1,5 +1,6 @@
 package br.com.raizesdonordeste.backend.service;
 
+import br.com.raizesdonordeste.backend.dto.request.AuditoriaRequest;
 import br.com.raizesdonordeste.backend.dto.request.EstoqueAtualizacaoRequest;
 import br.com.raizesdonordeste.backend.dto.request.EstoqueRequest;
 import br.com.raizesdonordeste.backend.dto.response.EstoqueResponse;
@@ -19,6 +20,7 @@ import java.util.List;
 public class EstoqueService {
 
     private final EstoqueRepository estoqueRepository;
+    private final AuditoriaService auditoriaService;
 
 
     public EstoqueResponse cadastrar(EstoqueRequest request) {
@@ -68,6 +70,8 @@ public class EstoqueService {
                 .orElseThrow(() ->
                         new EstoqueNaoEncontradoException("Estoque não encontrado"));
 
+        Integer quantidadeAntiga = estoque.getQuantidade();
+
         if (request.getUnidadeId() != null) {
             estoque.setUnidadeId(request.getUnidadeId());
         }
@@ -78,6 +82,22 @@ public class EstoqueService {
 
         if (request.getQuantidade() != null) {
             estoque.setQuantidade(request.getQuantidade());
+
+            if (!request.getQuantidade().equals(quantidadeAntiga)) {
+                AuditoriaRequest auditoriaRequest = new AuditoriaRequest();
+
+                auditoriaRequest.setPedidoId(null);
+                auditoriaRequest.setTipoOperacao("AJUSTE_ESTOQUE");
+                auditoriaRequest.setDescricao(
+                        "Estoque " + id
+                                + " ajustado. Quantidade alterada de "
+                                + quantidadeAntiga
+                                + " para "
+                                + request.getQuantidade()
+                );
+
+                auditoriaService.registrar(auditoriaRequest);
+            }
         }
 
         Estoque estoqueAtualizado = estoqueRepository.save(estoque);
