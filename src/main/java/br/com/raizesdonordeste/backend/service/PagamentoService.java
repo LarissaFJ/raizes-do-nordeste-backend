@@ -1,21 +1,24 @@
 package br.com.raizesdonordeste.backend.service;
 
-import br.com.raizesdonordeste.backend.dto.request.PagamentoAtualizacaoRequest;
 import br.com.raizesdonordeste.backend.dto.request.PagamentoRequest;
 import br.com.raizesdonordeste.backend.dto.response.PagamentoResponse;
-import br.com.raizesdonordeste.backend.entity.Pagamento;
-import br.com.raizesdonordeste.backend.entity.Pedido;
+import br.com.raizesdonordeste.backend.entity.Cliente;
 import br.com.raizesdonordeste.backend.entity.Estoque;
 import br.com.raizesdonordeste.backend.entity.ItemPedido;
+import br.com.raizesdonordeste.backend.entity.Pagamento;
+import br.com.raizesdonordeste.backend.entity.Pedido;
+import br.com.raizesdonordeste.backend.exception.ClienteNaoEncontradoException;
 import br.com.raizesdonordeste.backend.exception.EstoqueInsuficienteException;
 import br.com.raizesdonordeste.backend.exception.EstoqueNaoEncontradoException;
-import br.com.raizesdonordeste.backend.exception.PedidoJaConfirmadoException;
 import br.com.raizesdonordeste.backend.exception.PagamentoNaoEncontradoException;
+import br.com.raizesdonordeste.backend.exception.PedidoJaConfirmadoException;
 import br.com.raizesdonordeste.backend.exception.PedidoNaoEncontradoException;
-import br.com.raizesdonordeste.backend.repository.PagamentoRepository;
-import br.com.raizesdonordeste.backend.repository.PedidoRepository;
+import br.com.raizesdonordeste.backend.gateway.GatewayPagamento;
+import br.com.raizesdonordeste.backend.repository.ClienteRepository;
 import br.com.raizesdonordeste.backend.repository.EstoqueRepository;
 import br.com.raizesdonordeste.backend.repository.ItemPedidoRepository;
+import br.com.raizesdonordeste.backend.repository.PagamentoRepository;
+import br.com.raizesdonordeste.backend.repository.PedidoRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -23,8 +26,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Service
@@ -36,6 +39,8 @@ public class PagamentoService {
     private final PedidoRepository pedidoRepository;
     private final ItemPedidoRepository itemPedidoRepository;
     private final EstoqueRepository estoqueRepository;
+    private final ClienteRepository clienteRepository;
+    private final GatewayPagamento gatewayPagamento;
 
     @Transactional
     public PagamentoResponse cadastrar(PagamentoRequest request) {
@@ -45,7 +50,22 @@ public class PagamentoService {
                         new PedidoNaoEncontradoException("Pedido não encontrado"));
 
         if ("CONFIRMADO".equals(pedido.getStatusPedido())) {
-            throw new PedidoJaConfirmadoException("O pedido já possui pagamento confirmado");
+            throw new PedidoJaConfirmadoException("Pedido já confirmado");
+        }
+
+        var resultadoPagamento = gatewayPagamento.pagar(request, pedido.getCanalPedido());
+
+        if ("NEGADO".equals(resultadoPagamento)) {
+            Pagamento pagamentoRecusado = Pagamento.builder()
+                    .pedidoId(request.getPedidoId())
+                    .formaPagamento(request.getFormaPagamento())
+                    .valor(request.getValor())
+                    .status("RECUSADO")
+                    .dataPagamento(LocalDateTime.now())
+                    .build();
+
+            Pagamento pagamentoSalvo = pagamentoRepository.save(pagamentoRecusado);
+            return mapearParaResponse(pagamentoSalvo);
         }
 
         Map<Long, Integer> quantidadesPorProduto = new HashMap<>();
@@ -82,6 +102,17 @@ public class PagamentoService {
 
         pedido.setStatusPedido("CONFIRMADO");
         pedidoRepository.save(pedido);
+
+        Cliente cliente = clienteRepository.findById(pedido.getClienteId())
+                .orElseThrow(() ->
+                        new ClienteNaoEncontradoException("Cliente não encontrado"));
+
+        int pontosDaCompra = pagamentoSalvo.getValor().intValue();
+        int pontosAtuais = cliente.getPontosFidelidade() == null
+                ? 0
+                : cliente.getPontosFidelidade();
+        cliente.setPontosFidelidade(pontosAtuais + pontosDaCompra);
+        clienteRepository.save(cliente);
 
         log.info("Pagamento registrado com sucesso. id={}", pagamentoSalvo.getId());
 

@@ -26,7 +26,8 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler({
             EstoqueInsuficienteException.class,
-            PedidoJaConfirmadoException.class
+            PedidoJaConfirmadoException.class,
+            CpfJaCadastradoException.class
     })
     public ResponseEntity<String> tratarConflito(RuntimeException exception) {
 

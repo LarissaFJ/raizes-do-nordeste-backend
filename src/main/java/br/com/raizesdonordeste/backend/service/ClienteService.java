@@ -5,6 +5,7 @@ import br.com.raizesdonordeste.backend.dto.request.ClienteRequest;
 import br.com.raizesdonordeste.backend.dto.response.ClienteResponse;
 import br.com.raizesdonordeste.backend.entity.Cliente;
 import br.com.raizesdonordeste.backend.exception.ClienteNaoEncontradoException;
+import br.com.raizesdonordeste.backend.exception.CpfJaCadastradoException;
 import br.com.raizesdonordeste.backend.repository.ClienteRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -23,6 +24,10 @@ public class ClienteService {
 
 
     public ClienteResponse cadastrar(ClienteRequest request) {
+
+        if (clienteRepository.existsByCpf(request.getCpf())) {
+            throw new CpfJaCadastradoException("CPF já cadastrado");
+        }
 
         Cliente cliente = Cliente.builder()
                 .nome(request.getNome())
@@ -77,6 +82,12 @@ public class ClienteService {
         }
 
         if (request.getCpf() != null) {
+            clienteRepository.findByCpf(request.getCpf())
+                    .filter(clienteComMesmoCpf -> !clienteComMesmoCpf.getId().equals(cliente.getId()))
+                    .ifPresent(clienteComMesmoCpf -> {
+                        throw new CpfJaCadastradoException("CPF já cadastrado");
+                    });
+
             cliente.setCpf(request.getCpf());
         }
 
