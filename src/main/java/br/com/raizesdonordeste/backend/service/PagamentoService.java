@@ -14,7 +14,9 @@ import br.com.raizesdonordeste.backend.exception.PagamentoNaoEncontradoException
 import br.com.raizesdonordeste.backend.exception.PedidoJaConfirmadoException;
 import br.com.raizesdonordeste.backend.exception.PedidoNaoEncontradoException;
 import br.com.raizesdonordeste.backend.gateway.GatewayPagamento;
+import br.com.raizesdonordeste.backend.repository.AuditoriaRepository;
 import br.com.raizesdonordeste.backend.repository.ClienteRepository;
+import br.com.raizesdonordeste.backend.repository.AuditoriaRepository;
 import br.com.raizesdonordeste.backend.repository.EstoqueRepository;
 import br.com.raizesdonordeste.backend.repository.ItemPedidoRepository;
 import br.com.raizesdonordeste.backend.repository.PagamentoRepository;
@@ -40,6 +42,7 @@ public class PagamentoService {
     private final ItemPedidoRepository itemPedidoRepository;
     private final EstoqueRepository estoqueRepository;
     private final ClienteRepository clienteRepository;
+    private final AuditoriaRepository auditoriaRepository;
     private final GatewayPagamento gatewayPagamento;
 
     @Transactional
@@ -111,7 +114,17 @@ public class PagamentoService {
         int pontosAtuais = cliente.getPontosFidelidade() == null
                 ? 0
                 : cliente.getPontosFidelidade();
-        cliente.setPontosFidelidade(pontosAtuais + pontosDaCompra);
+
+        boolean usouFidelidade =
+                auditoriaRepository.existsByPedidoIdAndTipoOperacao(
+                        pedido.getId(),
+                        "DESCONTO_FIDELIDADE");
+
+        if (usouFidelidade) {
+            cliente.setPontosFidelidade(pontosDaCompra);
+        } else {
+            cliente.setPontosFidelidade(pontosAtuais + pontosDaCompra);
+        }
         clienteRepository.save(cliente);
 
         log.info("Pagamento registrado com sucesso. id={}", pagamentoSalvo.getId());

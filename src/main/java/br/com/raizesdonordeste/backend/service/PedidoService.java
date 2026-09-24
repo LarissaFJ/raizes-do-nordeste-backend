@@ -5,15 +5,18 @@ import br.com.raizesdonordeste.backend.dto.request.ItemPedidoRequest;
 import br.com.raizesdonordeste.backend.dto.request.PedidoAtualizacaoRequest;
 import br.com.raizesdonordeste.backend.dto.request.PedidoRequest;
 import br.com.raizesdonordeste.backend.dto.response.PedidoResponse;
+import br.com.raizesdonordeste.backend.entity.Cliente;
 import br.com.raizesdonordeste.backend.entity.Estoque;
 import br.com.raizesdonordeste.backend.entity.ItemPedido;
 import br.com.raizesdonordeste.backend.entity.Pedido;
 import br.com.raizesdonordeste.backend.entity.Produto;
+import br.com.raizesdonordeste.backend.exception.ClienteNaoEncontradoException;
 import br.com.raizesdonordeste.backend.exception.EstoqueInsuficienteException;
 import br.com.raizesdonordeste.backend.exception.EstoqueNaoEncontradoException;
 import br.com.raizesdonordeste.backend.exception.PedidoNaoEncontradoException;
 import br.com.raizesdonordeste.backend.exception.ProdutoNaoEncontradoException;
 import br.com.raizesdonordeste.backend.repository.EstoqueRepository;
+import br.com.raizesdonordeste.backend.repository.ClienteRepository;
 import br.com.raizesdonordeste.backend.repository.ItemPedidoRepository;
 import br.com.raizesdonordeste.backend.repository.PedidoRepository;
 import br.com.raizesdonordeste.backend.repository.ProdutoRepository;
@@ -23,6 +26,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -38,6 +42,7 @@ public class PedidoService {
     private final ProdutoRepository produtoRepository;
     private final ItemPedidoRepository itemPedidoRepository;
     private final EstoqueRepository estoqueRepository;
+    private final ClienteRepository clienteRepository;
     private final AuditoriaService auditoriaService;
 
     @Transactional
@@ -66,13 +71,17 @@ public class PedidoService {
             }
         }
 
+        Cliente cliente = clienteRepository.findById(request.getClienteId())
+                .orElseThrow(() ->
+                        new ClienteNaoEncontradoException("Cliente não encontrado"));
+
         Pedido pedido = Pedido.builder()
                 .clienteId(request.getClienteId())
                 .unidadeId(request.getUnidadeId())
                 .canalPedido(request.getCanalPedido())
                 .dataPedido(LocalDateTime.now())
                 .statusPedido("PENDENTE")
-                .desconto(request.getDesconto())
+                .desconto(BigDecimal.ZERO)
                 .valorTotal(BigDecimal.ZERO)
                 .build();
 
@@ -101,13 +110,43 @@ public class PedidoService {
             subtotal = subtotal.add(valorItem);
         }
 
-        BigDecimal desconto = request.getDesconto() != null
-                ? request.getDesconto()
-                : BigDecimal.ZERO;
+        BigDecimal desconto;
+        String tipoDesconto = null;
+        int pontosFidelidade = cliente.getPontosFidelidade() != null
+                ? cliente.getPontosFidelidade()
+                : 0;
+        int percentualDesconto = 0;
+        if (request.getDesconto() != null
+                && request.getDesconto().compareTo(BigDecimal.ZERO) > 0) {
+            desconto = request.getDesconto();
+        } else {
+            percentualDesconto = pontosFidelidade >= 300 ? 15
+                    : pontosFidelidade >= 200 ? 10
+                    : pontosFidelidade >= 100 ? 5
+                    : 0;
+
+            desconto = subtotal.multiply(BigDecimal.valueOf(percentualDesconto))
+                    .divide(BigDecimal.valueOf(100), 2, RoundingMode.HALF_UP);
+            if (desconto.compareTo(BigDecimal.ZERO) > 0) {
+                tipoDesconto = "DESCONTO_FIDELIDADE";
+            }
+        }
 
         BigDecimal valorTotal = subtotal.subtract(desconto);
 
+        pedidoSalvo.setDesconto(desconto);
         pedidoSalvo.setValorTotal(valorTotal);
+
+        if ("DESCONTO_FIDELIDADE".equals(tipoDesconto)) {
+            AuditoriaRequest auditoriaRequest = new AuditoriaRequest();
+            auditoriaRequest.setPedidoId(pedidoSalvo.getId());
+            auditoriaRequest.setTipoOperacao("DESCONTO_FIDELIDADE");
+            auditoriaRequest.setDescricao(
+                    "Desconto de fidelidade aplicado com " + pontosFidelidade
+                            + " pontos, percentual de " + percentualDesconto
+                            + "% e valor de " + desconto);
+            auditoriaService.registrar(auditoriaRequest);
+        }
 
         Pedido pedidoAtualizado = pedidoRepository.save(pedidoSalvo);
 
