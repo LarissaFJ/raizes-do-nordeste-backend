@@ -15,7 +15,8 @@ public class GlobalExceptionHandler {
             EstoqueNaoEncontradoException.class,
             PedidoNaoEncontradoException.class,
             PagamentoNaoEncontradoException.class,
-            AuditoriaNaoEncontradaException.class
+            AuditoriaNaoEncontradaException.class,
+            RoleUsuarioInvalidoException.class
     })
     public ResponseEntity<String> tratarNaoEncontrado(RuntimeException exception) {
 
@@ -27,12 +28,20 @@ public class GlobalExceptionHandler {
     @ExceptionHandler({
             EstoqueInsuficienteException.class,
             PedidoJaConfirmadoException.class,
-            CpfJaCadastradoException.class
+            CpfJaCadastradoException.class,
+            EmailJaCadastradoException.class
     })
     public ResponseEntity<String> tratarConflito(RuntimeException exception) {
 
         return ResponseEntity
                 .status(HttpStatus.CONFLICT)
+                .body(exception.getMessage());
+    }
+
+    @ExceptionHandler(CredenciaisInvalidasException.class)
+    public ResponseEntity<String> tratarCredenciaisInvalidas(CredenciaisInvalidasException exception) {
+        return ResponseEntity
+                .status(HttpStatus.UNAUTHORIZED)
                 .body(exception.getMessage());
     }
 }
