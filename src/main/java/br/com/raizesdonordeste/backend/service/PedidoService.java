@@ -10,6 +10,7 @@ import br.com.raizesdonordeste.backend.entity.Estoque;
 import br.com.raizesdonordeste.backend.entity.ItemPedido;
 import br.com.raizesdonordeste.backend.entity.Pedido;
 import br.com.raizesdonordeste.backend.entity.Produto;
+import br.com.raizesdonordeste.backend.entity.Usuario;
 import br.com.raizesdonordeste.backend.exception.ClienteNaoEncontradoException;
 import br.com.raizesdonordeste.backend.exception.EstoqueInsuficienteException;
 import br.com.raizesdonordeste.backend.exception.EstoqueNaoEncontradoException;
@@ -20,8 +21,13 @@ import br.com.raizesdonordeste.backend.repository.ClienteRepository;
 import br.com.raizesdonordeste.backend.repository.ItemPedidoRepository;
 import br.com.raizesdonordeste.backend.repository.PedidoRepository;
 import br.com.raizesdonordeste.backend.repository.ProdutoRepository;
+import br.com.raizesdonordeste.backend.repository.UsuarioRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.server.ResponseStatusException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -44,6 +50,7 @@ public class PedidoService {
     private final EstoqueRepository estoqueRepository;
     private final ClienteRepository clienteRepository;
     private final AuditoriaService auditoriaService;
+    private final UsuarioRepository usuarioRepository;
 
     @Transactional
     public PedidoResponse cadastrar(PedidoRequest request) {
@@ -71,12 +78,23 @@ public class PedidoService {
             }
         }
 
-        Cliente cliente = clienteRepository.findById(request.getClienteId())
+        Long clienteId = request.getClienteId();
+        Authentication authentication =
+                SecurityContextHolder.getContext().getAuthentication();
+
+
+        boolean clienteLogado = authentication.getAuthorities().stream()
+                .anyMatch(authority -> authority.getAuthority().equals("ROLE_CLIENTE"));
+
+        if (clienteLogado) {
+            clienteId = obterClienteIdDoUsuarioLogado();
+        }
+        Cliente cliente = clienteRepository.findById(clienteId)
                 .orElseThrow(() ->
                         new ClienteNaoEncontradoException("Cliente não encontrado"));
 
         Pedido pedido = Pedido.builder()
-                .clienteId(request.getClienteId())
+                .clienteId(clienteId)
                 .unidadeId(request.getUnidadeId())
                 .canalPedido(request.getCanalPedido())
                 .dataPedido(LocalDateTime.now())
@@ -157,7 +175,20 @@ public class PedidoService {
 
     public List<PedidoResponse> listar() {
 
-        List<Pedido> pedidos = pedidoRepository.findAll();
+        Authentication authentication =
+                SecurityContextHolder.getContext().getAuthentication();
+
+        boolean clienteLogado = authentication.getAuthorities().stream()
+                .anyMatch(authority -> authority.getAuthority().equals("ROLE_CLIENTE"));
+
+        List<Pedido> pedidos;
+
+        if (clienteLogado) {
+            Long clienteId = obterClienteIdDoUsuarioLogado();
+            pedidos = pedidoRepository.findByClienteId(clienteId);
+        } else {
+            pedidos = pedidoRepository.findAll();
+        }
 
         List<PedidoResponse> responses = new ArrayList<>();
 
@@ -176,6 +207,18 @@ public class PedidoService {
                 .orElseThrow(() ->
                         new PedidoNaoEncontradoException("Pedido não encontrado"));
 
+        Authentication authentication =
+                SecurityContextHolder.getContext().getAuthentication();
+
+        boolean clienteLogado = authentication.getAuthorities().stream()
+                .anyMatch(authority -> authority.getAuthority().equals("ROLE_CLIENTE"));
+
+        if (clienteLogado
+                && !java.util.Objects.equals(
+                        pedido.getClienteId(), obterClienteIdDoUsuarioLogado())) {
+            throw new ResponseStatusException(
+                    HttpStatus.FORBIDDEN, "Você não tem acesso a este pedido");
+        }
         log.info("Pedido consultado. id={}", id);
 
         return mapearParaResponse(pedido);
@@ -188,6 +231,18 @@ public class PedidoService {
         Pedido pedido = pedidoRepository.findById(id)
                 .orElseThrow(() ->
                         new PedidoNaoEncontradoException("Pedido não encontrado"));
+        Authentication authentication =
+                SecurityContextHolder.getContext().getAuthentication();
+
+        boolean clienteLogado = authentication.getAuthorities().stream()
+                .anyMatch(authority -> authority.getAuthority().equals("ROLE_CLIENTE"));
+
+        if (clienteLogado
+                && !java.util.Objects.equals(
+                        pedido.getClienteId(), obterClienteIdDoUsuarioLogado())) {
+            throw new ResponseStatusException(
+                    HttpStatus.FORBIDDEN, "Acesso negado ao pedido");
+        }
 
         BigDecimal descontoAntigo = pedido.getDesconto() != null
                 ? pedido.getDesconto()
@@ -275,6 +330,19 @@ public class PedidoService {
         pedidoRepository.delete(pedido);
 
         log.info("Pedido excluído com sucesso. id={}", id);
+    }
+
+    private Long obterClienteIdDoUsuarioLogado() {
+        Authentication authentication =
+                SecurityContextHolder.getContext().getAuthentication();
+
+        Long usuarioId = Long.valueOf(authentication.getName());
+
+        Usuario usuario = usuarioRepository.findById(usuarioId)
+                .orElseThrow(() -> new IllegalStateException(
+                        "Usuário autenticado não encontrado"));
+
+        return usuario.getClienteId();
     }
 
     private PedidoResponse mapearParaResponse(Pedido pedido) {
