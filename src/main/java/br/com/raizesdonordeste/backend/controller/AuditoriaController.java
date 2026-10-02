@@ -3,6 +3,7 @@ package br.com.raizesdonordeste.backend.controller;
 import br.com.raizesdonordeste.backend.dto.request.AuditoriaRequest;
 import br.com.raizesdonordeste.backend.dto.response.AuditoriaResponse;
 import br.com.raizesdonordeste.backend.service.AuditoriaService;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
+@SecurityRequirement(name = "bearerAuth")
 @RestController
 @RequestMapping("/auditorias")
 @RequiredArgsConstructor

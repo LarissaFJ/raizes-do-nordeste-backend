@@ -3,6 +3,7 @@ package br.com.raizesdonordeste.backend.controller;
 import br.com.raizesdonordeste.backend.dto.request.PagamentoRequest;
 import br.com.raizesdonordeste.backend.dto.response.PagamentoResponse;
 import br.com.raizesdonordeste.backend.service.PagamentoService;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
+@SecurityRequirement(name = "bearerAuth")
 @RestController
 @RequestMapping("/pagamentos")
 @RequiredArgsConstructor

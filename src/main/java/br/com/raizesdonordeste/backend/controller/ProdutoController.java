@@ -4,6 +4,7 @@ import br.com.raizesdonordeste.backend.dto.request.ProdutoAtualizacaoRequest;
 import br.com.raizesdonordeste.backend.dto.request.ProdutoRequest;
 import br.com.raizesdonordeste.backend.dto.response.ProdutoResponse;
 import br.com.raizesdonordeste.backend.service.ProdutoService;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -25,6 +26,7 @@ public class ProdutoController {
 
     private final ProdutoService produtoService;
 
+    @SecurityRequirement(name = "bearerAuth")
     @PostMapping
     public ResponseEntity<ProdutoResponse> cadastrar(
             @RequestBody ProdutoRequest request) {
@@ -47,6 +49,7 @@ public class ProdutoController {
         return ResponseEntity.ok(produtoService.buscarPorId(id));
     }
 
+    @SecurityRequirement(name = "bearerAuth")
     @PatchMapping("/{id}")
     public ResponseEntity<ProdutoResponse> atualizar(
             @PathVariable Long id,
@@ -57,6 +60,7 @@ public class ProdutoController {
         );
     }
 
+    @SecurityRequirement(name = "bearerAuth")
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> excluir(
             @PathVariable Long id) {

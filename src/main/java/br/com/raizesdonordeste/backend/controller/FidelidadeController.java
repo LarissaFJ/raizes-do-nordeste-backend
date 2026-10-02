@@ -2,6 +2,7 @@ package br.com.raizesdonordeste.backend.controller;
 
 import br.com.raizesdonordeste.backend.dto.response.FidelidadeResponse;
 import br.com.raizesdonordeste.backend.service.FidelidadeService;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -9,6 +10,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+@SecurityRequirement(name = "bearerAuth")
 @RestController
 @RequestMapping("/fidelidade")
 @RequiredArgsConstructor

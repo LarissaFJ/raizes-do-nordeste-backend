@@ -40,6 +40,8 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers("/auth/cadastro", "/auth/login").permitAll()
+                        .requestMatchers("/swagger-ui/**", "/swagger-ui.html", "/v3/api-docs/**").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/smoke").permitAll()
                         .requestMatchers(HttpMethod.POST, "/usuarios").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.GET, "/usuarios").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.GET, "/produtos", "/produtos/**").permitAll()

@@ -4,6 +4,7 @@ import br.com.raizesdonordeste.backend.dto.request.PedidoAtualizacaoRequest;
 import br.com.raizesdonordeste.backend.dto.request.PedidoRequest;
 import br.com.raizesdonordeste.backend.dto.response.PedidoResponse;
 import br.com.raizesdonordeste.backend.service.PedidoService;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
+@SecurityRequirement(name = "bearerAuth")
 @RestController
 @RequestMapping("/pedidos")
 @RequiredArgsConstructor

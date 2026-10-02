@@ -4,6 +4,7 @@ import br.com.raizesdonordeste.backend.dto.request.UnidadeAtualizacaoRequest;
 import br.com.raizesdonordeste.backend.dto.request.UnidadeRequest;
 import br.com.raizesdonordeste.backend.dto.response.UnidadeResponse;
 import br.com.raizesdonordeste.backend.service.UnidadeService;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -25,6 +26,7 @@ public class UnidadeController {
 
     private final UnidadeService unidadeService;
 
+    @SecurityRequirement(name = "bearerAuth")
     @PostMapping
     public ResponseEntity<UnidadeResponse> cadastrar(
             @RequestBody UnidadeRequest request) {
@@ -47,6 +49,7 @@ public class UnidadeController {
         return ResponseEntity.ok(unidadeService.buscarPorId(id));
     }
 
+    @SecurityRequirement(name = "bearerAuth")
     @PatchMapping("/{id}")
     public ResponseEntity<UnidadeResponse> atualizar(
             @PathVariable Long id,
@@ -57,6 +60,7 @@ public class UnidadeController {
         );
     }
 
+    @SecurityRequirement(name = "bearerAuth")
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> excluir(
             @PathVariable Long id) {
