@@ -4,11 +4,18 @@ import br.com.raizesdonordeste.backend.dto.request.ClienteAtualizacaoRequest;
 import br.com.raizesdonordeste.backend.dto.request.ClienteRequest;
 import br.com.raizesdonordeste.backend.dto.response.ClienteResponse;
 import br.com.raizesdonordeste.backend.entity.Cliente;
+import br.com.raizesdonordeste.backend.entity.Usuario;
 import br.com.raizesdonordeste.backend.exception.ClienteNaoEncontradoException;
 import br.com.raizesdonordeste.backend.exception.CpfJaCadastradoException;
 import br.com.raizesdonordeste.backend.repository.ClienteRepository;
+import br.com.raizesdonordeste.backend.repository.UsuarioRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.web.server.ResponseStatusException;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -21,6 +28,7 @@ import java.util.List;
 public class ClienteService {
 
     private final ClienteRepository clienteRepository;
+    private final UsuarioRepository usuarioRepository;
 
 
     public ClienteResponse cadastrar(ClienteRequest request) {
@@ -49,18 +57,31 @@ public class ClienteService {
 
         log.info("Listando clientes");
 
-        List<Cliente> clientes = clienteRepository.findAll();
+        Authentication authentication =
+                SecurityContextHolder.getContext().getAuthentication();
+        boolean clienteLogado = authentication.getAuthorities().contains(
+                new SimpleGrantedAuthority("ROLE_CLIENTE"));
+
+        List<Cliente> clientes;
+        if (clienteLogado) {
+            Long clienteId = obterClienteIdDoUsuarioLogado();
+            Cliente cliente = clienteRepository.findById(clienteId)
+                    .orElseThrow(() ->
+                            new ClienteNaoEncontradoException("Cliente não encontrado"));
+            clientes = List.of(cliente);
+        } else {
+            clientes = clienteRepository.findAll();
+        }
 
         List<ClienteResponse> responses = new ArrayList<>();
-
         for (Cliente cliente : clientes) {
             responses.add(mapearParaResponse(cliente));
         }
-
         return responses;
     }
-
     public ClienteResponse buscarPorId(Long id) {
+
+        verificarAcessoAoCliente(id);
 
         log.info("Buscando cliente. id={}", id);
 
@@ -72,6 +93,8 @@ public class ClienteService {
     }
 
     public ClienteResponse atualizar(Long id, ClienteAtualizacaoRequest request) {
+
+        verificarAcessoAoCliente(id);
 
         Cliente cliente = clienteRepository.findById(id)
                 .orElseThrow(() ->
@@ -108,6 +131,8 @@ public class ClienteService {
 
     public void excluir(Long id) {
 
+        verificarAcessoAoCliente(id);
+
         Cliente cliente = clienteRepository.findById(id)
                 .orElseThrow(() ->
                         new ClienteNaoEncontradoException("Cliente não encontrado"));
@@ -117,6 +142,31 @@ public class ClienteService {
         log.info("Cliente excluído com sucesso. id={}", id);
     }
 
+    private Long obterClienteIdDoUsuarioLogado() {
+        Authentication authentication =
+                SecurityContextHolder.getContext().getAuthentication();
+        Long usuarioId = Long.valueOf(authentication.getName());
+        Usuario usuario = usuarioRepository.findById(usuarioId)
+                .orElseThrow(() -> new IllegalStateException(
+                        "Usuário autenticado não encontrado"));
+        return usuario.getClienteId();
+    }
+
+    private void verificarAcessoAoCliente(Long clienteId) {
+        Authentication authentication =
+                SecurityContextHolder.getContext().getAuthentication();
+        boolean clienteLogado = authentication.getAuthorities().contains(
+                new SimpleGrantedAuthority("ROLE_CLIENTE"));
+
+        if (clienteLogado) {
+            Long clienteIdLogado = obterClienteIdDoUsuarioLogado();
+            if (!java.util.Objects.equals(clienteIdLogado, clienteId)) {
+                throw new ResponseStatusException(
+                        HttpStatus.FORBIDDEN,
+                        "Você não tem acesso a este cliente");
+            }
+        }
+    }
     private ClienteResponse mapearParaResponse(Cliente cliente) {
 
         ClienteResponse response = new ClienteResponse();
