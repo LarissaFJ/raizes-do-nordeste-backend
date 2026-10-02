@@ -1,6 +1,5 @@
 package br.com.raizesdonordeste.backend.controller;
 
-import br.com.raizesdonordeste.backend.dto.request.PagamentoAtualizacaoRequest;
 import br.com.raizesdonordeste.backend.dto.request.PagamentoRequest;
 import br.com.raizesdonordeste.backend.dto.response.PagamentoResponse;
 import br.com.raizesdonordeste.backend.service.PagamentoService;
@@ -9,7 +8,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;

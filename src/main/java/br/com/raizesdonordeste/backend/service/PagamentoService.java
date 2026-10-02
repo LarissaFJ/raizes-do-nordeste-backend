@@ -7,6 +7,7 @@ import br.com.raizesdonordeste.backend.entity.Estoque;
 import br.com.raizesdonordeste.backend.entity.ItemPedido;
 import br.com.raizesdonordeste.backend.entity.Pagamento;
 import br.com.raizesdonordeste.backend.entity.Pedido;
+import br.com.raizesdonordeste.backend.entity.Usuario;
 import br.com.raizesdonordeste.backend.exception.ClienteNaoEncontradoException;
 import br.com.raizesdonordeste.backend.exception.EstoqueInsuficienteException;
 import br.com.raizesdonordeste.backend.exception.EstoqueNaoEncontradoException;
@@ -16,13 +17,17 @@ import br.com.raizesdonordeste.backend.exception.PedidoNaoEncontradoException;
 import br.com.raizesdonordeste.backend.gateway.GatewayPagamento;
 import br.com.raizesdonordeste.backend.repository.AuditoriaRepository;
 import br.com.raizesdonordeste.backend.repository.ClienteRepository;
-import br.com.raizesdonordeste.backend.repository.AuditoriaRepository;
 import br.com.raizesdonordeste.backend.repository.EstoqueRepository;
 import br.com.raizesdonordeste.backend.repository.ItemPedidoRepository;
 import br.com.raizesdonordeste.backend.repository.PagamentoRepository;
 import br.com.raizesdonordeste.backend.repository.PedidoRepository;
+import br.com.raizesdonordeste.backend.repository.UsuarioRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.web.server.ResponseStatusException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -44,6 +49,7 @@ public class PagamentoService {
     private final ClienteRepository clienteRepository;
     private final AuditoriaRepository auditoriaRepository;
     private final GatewayPagamento gatewayPagamento;
+    private final UsuarioRepository usuarioRepository;
 
     @Transactional
     public PagamentoResponse cadastrar(PagamentoRequest request) {
@@ -51,6 +57,29 @@ public class PagamentoService {
         Pedido pedido = pedidoRepository.findById(request.getPedidoId())
                 .orElseThrow(() ->
                         new PedidoNaoEncontradoException("Pedido não encontrado"));
+        Authentication authentication =
+                SecurityContextHolder.getContext().getAuthentication();
+
+        boolean clienteLogado = authentication.getAuthorities().stream()
+                .anyMatch(authority ->
+                        authority.getAuthority().equals("ROLE_CLIENTE"));
+
+        if (clienteLogado) {
+            Long usuarioId = Long.valueOf(authentication.getName());
+
+            Usuario usuario = usuarioRepository.findById(usuarioId)
+                    .orElseThrow(() ->
+                            new IllegalStateException(
+                                    "Usuário autenticado não encontrado"));
+
+            if (!java.util.Objects.equals(
+                    usuario.getClienteId(),
+                    pedido.getClienteId())) {
+                throw new ResponseStatusException(
+                        HttpStatus.FORBIDDEN,
+                        "Voc� n�o tem acesso a este pedido");
+            }
+        }
 
         if ("CONFIRMADO".equals(pedido.getStatusPedido())) {
             throw new PedidoJaConfirmadoException("Pedido já confirmado");
@@ -134,25 +163,46 @@ public class PagamentoService {
 
     public List<PagamentoResponse> listar() {
 
-        List<Pagamento> pagamentos = pagamentoRepository.findAll();
+        Authentication authentication =
+                SecurityContextHolder.getContext().getAuthentication();
+        boolean clienteLogado = authentication.getAuthorities().stream()
+                .anyMatch(authority ->
+                        authority.getAuthority().equals("ROLE_CLIENTE"));
+        Long clienteIdLogado = clienteLogado
+                ? obterClienteIdDoUsuario(authentication)
+                : null;
 
+        List<Pagamento> pagamentos = pagamentoRepository.findAll();
         List<PagamentoResponse> responses = new ArrayList<>();
 
         for (Pagamento pagamento : pagamentos) {
+            if (clienteLogado && !pertenceAoCliente(pagamento, clienteIdLogado)) {
+                continue;
+            }
             responses.add(mapearParaResponse(pagamento));
         }
 
         log.info("Lista de pagamentos consultada. quantidade={}", responses.size());
-
         return responses;
     }
-
     public PagamentoResponse buscarPorId(Long id) {
 
         Pagamento pagamento = pagamentoRepository.findById(id)
                 .orElseThrow(() ->
                         new PagamentoNaoEncontradoException("Pagamento não encontrado"));
 
+        Authentication authentication =
+                SecurityContextHolder.getContext().getAuthentication();
+        boolean clienteLogado = authentication.getAuthorities().stream()
+                .anyMatch(authority ->
+                        authority.getAuthority().equals("ROLE_CLIENTE"));
+
+        if (clienteLogado && !pertenceAoCliente(
+                pagamento, obterClienteIdDoUsuario(authentication))) {
+            throw new ResponseStatusException(
+                    HttpStatus.FORBIDDEN,
+                    "Voc� n�o tem acesso a este pagamento");
+        }
         log.info("Pagamento consultado. id={}", id);
 
         return mapearParaResponse(pagamento);
@@ -169,6 +219,20 @@ public class PagamentoService {
         log.info("Pagamento excluído com sucesso. id={}", id);
     }
 
+    private Long obterClienteIdDoUsuario(Authentication authentication) {
+        Long usuarioId = Long.valueOf(authentication.getName());
+        Usuario usuario = usuarioRepository.findById(usuarioId)
+                .orElseThrow(() -> new IllegalStateException(
+                        "Usu�rio autenticado n�o encontrado"));
+        return usuario.getClienteId();
+    }
+
+    private boolean pertenceAoCliente(Pagamento pagamento, Long clienteId) {
+        return pedidoRepository.findById(pagamento.getPedidoId())
+                .map(pedido -> java.util.Objects.equals(
+                        pedido.getClienteId(), clienteId))
+                .orElse(false);
+    }
     private PagamentoResponse mapearParaResponse(Pagamento pagamento) {
 
         PagamentoResponse response = new PagamentoResponse();
