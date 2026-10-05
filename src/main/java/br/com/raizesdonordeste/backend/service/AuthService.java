@@ -8,6 +8,7 @@ import br.com.raizesdonordeste.backend.entity.Usuario;
 import br.com.raizesdonordeste.backend.enums.Role;
 import br.com.raizesdonordeste.backend.exception.CredenciaisInvalidasException;
 import br.com.raizesdonordeste.backend.exception.EmailJaCadastradoException;
+import br.com.raizesdonordeste.backend.exception.CpfJaCadastradoException;
 import br.com.raizesdonordeste.backend.repository.ClienteRepository;
 import br.com.raizesdonordeste.backend.repository.UsuarioRepository;
 import br.com.raizesdonordeste.backend.security.JwtService;
@@ -33,6 +34,10 @@ public class AuthService {
     public AuthResponse cadastrar(AuthCadastroRequest request) {
         if (usuarioRepository.existsByEmail(request.getEmail())) {
             throw new EmailJaCadastradoException("Email já cadastrado");
+        }
+
+        if (clienteRepository.existsByCpf(request.getCpf())) {
+            throw new CpfJaCadastradoException("CPF já cadastrado");
         }
 
         Cliente cliente = Cliente.builder()

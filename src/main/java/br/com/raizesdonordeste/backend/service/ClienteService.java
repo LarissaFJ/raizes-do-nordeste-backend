@@ -1,7 +1,6 @@
 package br.com.raizesdonordeste.backend.service;
 
 import br.com.raizesdonordeste.backend.dto.request.ClienteAtualizacaoRequest;
-import br.com.raizesdonordeste.backend.dto.request.ClienteRequest;
 import br.com.raizesdonordeste.backend.dto.response.ClienteResponse;
 import br.com.raizesdonordeste.backend.entity.Cliente;
 import br.com.raizesdonordeste.backend.entity.Usuario;
@@ -15,10 +14,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.web.server.ResponseStatusException;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,28 +28,6 @@ public class ClienteService {
     private final ClienteRepository clienteRepository;
     private final UsuarioRepository usuarioRepository;
 
-
-    public ClienteResponse cadastrar(ClienteRequest request) {
-
-        if (clienteRepository.existsByCpf(request.getCpf())) {
-            throw new CpfJaCadastradoException("CPF já cadastrado");
-        }
-
-        Cliente cliente = Cliente.builder()
-                .nome(request.getNome())
-                .cpf(request.getCpf())
-                .email(request.getEmail())
-                .telefone(request.getTelefone())
-                .pontosFidelidade(0)
-                .dataCadastro(LocalDateTime.now())
-                .build();
-
-        Cliente clienteSalvo = clienteRepository.save(cliente);
-
-        log.info("Cliente cadastrado com sucesso. id={}", clienteSalvo.getId());
-
-        return mapearParaResponse(clienteSalvo);
-    }
 
     public List<ClienteResponse> listar() {
 
