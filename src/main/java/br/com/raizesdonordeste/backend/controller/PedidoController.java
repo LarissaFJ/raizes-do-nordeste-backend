@@ -3,6 +3,7 @@ package br.com.raizesdonordeste.backend.controller;
 import br.com.raizesdonordeste.backend.dto.request.PedidoAtualizacaoRequest;
 import br.com.raizesdonordeste.backend.dto.request.PedidoRequest;
 import br.com.raizesdonordeste.backend.dto.response.PedidoResponse;
+import br.com.raizesdonordeste.backend.enums.CanalPedido;
 import br.com.raizesdonordeste.backend.service.PedidoService;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -37,9 +39,10 @@ public class PedidoController {
     }
 
     @GetMapping
-    public ResponseEntity<List<PedidoResponse>> listar() {
+    public ResponseEntity<List<PedidoResponse>> listar(
+            @RequestParam(required = false) CanalPedido canalPedido) {
 
-        return ResponseEntity.ok(pedidoService.listar());
+        return ResponseEntity.ok(pedidoService.listar(canalPedido));
     }
 
     @GetMapping("/{id}")

@@ -11,6 +11,7 @@ import br.com.raizesdonordeste.backend.entity.ItemPedido;
 import br.com.raizesdonordeste.backend.entity.Pedido;
 import br.com.raizesdonordeste.backend.entity.Produto;
 import br.com.raizesdonordeste.backend.entity.Usuario;
+import br.com.raizesdonordeste.backend.enums.CanalPedido;
 import br.com.raizesdonordeste.backend.exception.ClienteNaoEncontradoException;
 import br.com.raizesdonordeste.backend.exception.EstoqueInsuficienteException;
 import br.com.raizesdonordeste.backend.exception.EstoqueNaoEncontradoException;
@@ -60,7 +61,7 @@ public class PedidoService {
         for (ItemPedidoRequest itemRequest : request.getItens()) {
             produtoRepository.findById(itemRequest.getProdutoId())
                     .orElseThrow(() ->
-                            new ProdutoNaoEncontradoException("Produto não encontrado"));
+                            new ProdutoNaoEncontradoException("Produto nÃ£o encontrado"));
 
             quantidadesPorProduto.merge(
                     itemRequest.getProdutoId(), itemRequest.getQuantidade(), Integer::sum);
@@ -70,7 +71,7 @@ public class PedidoService {
             Estoque estoque = estoqueRepository
                     .findByUnidadeIdAndProdutoId(request.getUnidadeId(), item.getKey())
                     .orElseThrow(() -> new EstoqueNaoEncontradoException(
-                            "Estoque não encontrado para o produto " + item.getKey()));
+                            "Estoque nÃ£o encontrado para o produto " + item.getKey()));
 
             if (estoque.getQuantidade() < item.getValue()) {
                 throw new EstoqueInsuficienteException(
@@ -91,7 +92,7 @@ public class PedidoService {
         }
         Cliente cliente = clienteRepository.findById(clienteId)
                 .orElseThrow(() ->
-                        new ClienteNaoEncontradoException("Cliente não encontrado"));
+                        new ClienteNaoEncontradoException("Cliente nÃ£o encontrado"));
 
         Pedido pedido = Pedido.builder()
                 .clienteId(clienteId)
@@ -111,7 +112,7 @@ public class PedidoService {
 
             Produto produto = produtoRepository.findById(itemRequest.getProdutoId())
                     .orElseThrow(() ->
-                            new ProdutoNaoEncontradoException("Produto não encontrado"));
+                            new ProdutoNaoEncontradoException("Produto nÃ£o encontrado"));
 
             BigDecimal valorItem = produto.getPreco()
                     .multiply(BigDecimal.valueOf(itemRequest.getQuantidade()));
@@ -173,7 +174,7 @@ public class PedidoService {
         return mapearParaResponse(pedidoAtualizado);
     }
 
-    public List<PedidoResponse> listar() {
+    public List<PedidoResponse> listar(CanalPedido canalPedido) {
 
         Authentication authentication =
                 SecurityContextHolder.getContext().getAuthentication();
@@ -185,9 +186,19 @@ public class PedidoService {
 
         if (clienteLogado) {
             Long clienteId = obterClienteIdDoUsuarioLogado();
-            pedidos = pedidoRepository.findByClienteId(clienteId);
+
+            if (canalPedido != null) {
+                pedidos = pedidoRepository.findByClienteIdAndCanalPedido(
+                        clienteId, canalPedido);
+            } else {
+                pedidos = pedidoRepository.findByClienteId(clienteId);
+            }
         } else {
-            pedidos = pedidoRepository.findAll();
+            if (canalPedido != null) {
+                pedidos = pedidoRepository.findByCanalPedido(canalPedido);
+            } else {
+                pedidos = pedidoRepository.findAll();
+            }
         }
 
         List<PedidoResponse> responses = new ArrayList<>();
@@ -205,7 +216,7 @@ public class PedidoService {
 
         Pedido pedido = pedidoRepository.findById(id)
                 .orElseThrow(() ->
-                        new PedidoNaoEncontradoException("Pedido não encontrado"));
+                        new PedidoNaoEncontradoException("Pedido nÃ£o encontrado"));
 
         Authentication authentication =
                 SecurityContextHolder.getContext().getAuthentication();
@@ -217,7 +228,7 @@ public class PedidoService {
                 && !java.util.Objects.equals(
                         pedido.getClienteId(), obterClienteIdDoUsuarioLogado())) {
             throw new ResponseStatusException(
-                    HttpStatus.FORBIDDEN, "Você não tem acesso a este pedido");
+                    HttpStatus.FORBIDDEN, "VocÃª nÃ£o tem acesso a este pedido");
         }
         log.info("Pedido consultado. id={}", id);
 
@@ -230,7 +241,7 @@ public class PedidoService {
 
         Pedido pedido = pedidoRepository.findById(id)
                 .orElseThrow(() ->
-                        new PedidoNaoEncontradoException("Pedido não encontrado"));
+                        new PedidoNaoEncontradoException("Pedido nÃ£o encontrado"));
         Authentication authentication =
                 SecurityContextHolder.getContext().getAuthentication();
 
@@ -325,11 +336,11 @@ public class PedidoService {
 
         Pedido pedido = pedidoRepository.findById(id)
                 .orElseThrow(() ->
-                        new PedidoNaoEncontradoException("Pedido não encontrado"));
+                        new PedidoNaoEncontradoException("Pedido nÃ£o encontrado"));
 
         pedidoRepository.delete(pedido);
 
-        log.info("Pedido excluído com sucesso. id={}", id);
+        log.info("Pedido excluÃ­do com sucesso. id={}", id);
     }
 
     private Long obterClienteIdDoUsuarioLogado() {
@@ -340,7 +351,7 @@ public class PedidoService {
 
         Usuario usuario = usuarioRepository.findById(usuarioId)
                 .orElseThrow(() -> new IllegalStateException(
-                        "Usuário autenticado não encontrado"));
+                        "UsuÃ¡rio autenticado nÃ£o encontrado"));
 
         return usuario.getClienteId();
     }
