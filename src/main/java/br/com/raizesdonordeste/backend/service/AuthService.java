@@ -17,6 +17,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDateTime;
 
@@ -32,6 +34,12 @@ public class AuthService {
 
     @Transactional
     public AuthResponse cadastrar(AuthCadastroRequest request) {
+        if (!request.isConsentimentoLgpd()) {
+            throw new ResponseStatusException(
+                    HttpStatus.BAD_REQUEST,
+                    "O consentimento para o tratamento de dados pessoais é obrigatório");
+        }
+
         if (usuarioRepository.existsByEmail(request.getEmail())) {
             throw new EmailJaCadastradoException("Email já cadastrado");
         }
@@ -47,6 +55,7 @@ public class AuthService {
                 .telefone(request.getTelefone())
                 .pontosFidelidade(0)
                 .dataCadastro(LocalDateTime.now())
+                .consentimentoLgpd(request.isConsentimentoLgpd())
                 .build();
 
         Cliente clienteSalvo = clienteRepository.save(cliente);

@@ -29,5 +29,6 @@ public class Cliente {
     private String telefone;
     private Integer pontosFidelidade;
     private LocalDateTime dataCadastro;
+    private boolean consentimentoLgpd;
 
 }

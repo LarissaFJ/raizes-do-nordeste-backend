@@ -12,4 +12,5 @@ public class AuthCadastroRequest {
     private String email;
     private String telefone;
     private String senha;
+    private boolean consentimentoLgpd;
 }
