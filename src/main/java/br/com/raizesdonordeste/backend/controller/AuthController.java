@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.server.ResponseStatusException;
 
 @RestController
 @RequestMapping("/auth")
@@ -19,8 +20,14 @@ public class AuthController {
     private final AuthService authService;
 
     @PostMapping("/cadastro")
-    public ResponseEntity<AuthResponse> cadastrar(@RequestBody AuthCadastroRequest request) {
-        return ResponseEntity.ok(authService.cadastrar(request));
+    public ResponseEntity<?> cadastrar(@RequestBody AuthCadastroRequest request) {
+        try {
+            return ResponseEntity.ok(authService.cadastrar(request));
+        } catch (ResponseStatusException exception) {
+            return ResponseEntity
+                    .status(exception.getStatusCode())
+                    .body(exception.getReason());
+        }
     }
 
     @PostMapping("/login")
