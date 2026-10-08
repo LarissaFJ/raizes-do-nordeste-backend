@@ -10,7 +10,7 @@ import lombok.Setter;
 @Setter
 public class UsuarioRequest {
 
-    @NotBlank(message = "Campo obrigatório")
+    @NotBlank(message = "E-mail é obrigatório")
     @Email(message = "E-mail deve ser válido")
     @Size(max = 255, message = "O campo deve ter no máximo 255 caracteres")
     private String email;

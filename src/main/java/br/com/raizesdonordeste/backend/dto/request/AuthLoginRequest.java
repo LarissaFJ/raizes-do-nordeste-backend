@@ -9,7 +9,7 @@ import lombok.Setter;
 @Setter
 public class AuthLoginRequest {
 
-    @NotBlank(message = "Campo obrigatório")
+    @NotBlank(message = "E-mail é obrigatório")
     @Email(message = "E-mail deve ser válido")
     private String email;
     @NotBlank(message = "Campo obrigatório")

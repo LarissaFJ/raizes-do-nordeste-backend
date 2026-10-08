@@ -14,7 +14,7 @@ public class AuthCadastroRequest {
     @NotBlank(message = "Campo obrigatório")
     @Pattern(regexp = "\\d{11}", message = "CPF deve conter 11 dígitos")
     private String cpf;
-    @NotBlank(message = "Campo obrigatório")
+    @NotBlank(message = "E-mail é obrigatório")
     @Email(message = "E-mail deve ser válido")
     @Size(max = 255, message = "O campo deve ter no máximo 255 caracteres")
     private String email;
