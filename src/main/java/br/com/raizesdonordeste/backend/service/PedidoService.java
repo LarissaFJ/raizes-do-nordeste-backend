@@ -61,7 +61,7 @@ public class PedidoService {
         for (ItemPedidoRequest itemRequest : request.getItens()) {
             produtoRepository.findById(itemRequest.getProdutoId())
                     .orElseThrow(() ->
-                            new ProdutoNaoEncontradoException("Produto nÃ£o encontrado"));
+                            new ProdutoNaoEncontradoException("Produto não encontrado"));
 
             quantidadesPorProduto.merge(
                     itemRequest.getProdutoId(), itemRequest.getQuantidade(), Integer::sum);
@@ -71,7 +71,7 @@ public class PedidoService {
             Estoque estoque = estoqueRepository
                     .findByUnidadeIdAndProdutoId(request.getUnidadeId(), item.getKey())
                     .orElseThrow(() -> new EstoqueNaoEncontradoException(
-                            "Estoque nÃ£o encontrado para o produto " + item.getKey()));
+                            "Estoque não encontrado para o produto " + item.getKey()));
 
             if (estoque.getQuantidade() < item.getValue()) {
                 throw new EstoqueInsuficienteException(
@@ -92,7 +92,7 @@ public class PedidoService {
         }
         Cliente cliente = clienteRepository.findById(clienteId)
                 .orElseThrow(() ->
-                        new ClienteNaoEncontradoException("Cliente nÃ£o encontrado"));
+                        new ClienteNaoEncontradoException("Cliente não encontrado"));
 
         Pedido pedido = Pedido.builder()
                 .clienteId(clienteId)
@@ -112,7 +112,7 @@ public class PedidoService {
 
             Produto produto = produtoRepository.findById(itemRequest.getProdutoId())
                     .orElseThrow(() ->
-                            new ProdutoNaoEncontradoException("Produto nÃ£o encontrado"));
+                            new ProdutoNaoEncontradoException("Produto não encontrado"));
 
             BigDecimal valorItem = produto.getPreco()
                     .multiply(BigDecimal.valueOf(itemRequest.getQuantidade()));
@@ -216,7 +216,7 @@ public class PedidoService {
 
         Pedido pedido = pedidoRepository.findById(id)
                 .orElseThrow(() ->
-                        new PedidoNaoEncontradoException("Pedido nÃ£o encontrado"));
+                        new PedidoNaoEncontradoException("Pedido não encontrado"));
 
         Authentication authentication =
                 SecurityContextHolder.getContext().getAuthentication();
@@ -228,7 +228,7 @@ public class PedidoService {
                 && !java.util.Objects.equals(
                         pedido.getClienteId(), obterClienteIdDoUsuarioLogado())) {
             throw new ResponseStatusException(
-                    HttpStatus.FORBIDDEN, "VocÃª nÃ£o tem acesso a este pedido");
+                    HttpStatus.FORBIDDEN, "Você não tem acesso a este pedido");
         }
         log.info("Pedido consultado. id={}", id);
 
@@ -241,7 +241,7 @@ public class PedidoService {
 
         Pedido pedido = pedidoRepository.findById(id)
                 .orElseThrow(() ->
-                        new PedidoNaoEncontradoException("Pedido nÃ£o encontrado"));
+                        new PedidoNaoEncontradoException("Pedido não encontrado"));
         Authentication authentication =
                 SecurityContextHolder.getContext().getAuthentication();
 
@@ -336,11 +336,11 @@ public class PedidoService {
 
         Pedido pedido = pedidoRepository.findById(id)
                 .orElseThrow(() ->
-                        new PedidoNaoEncontradoException("Pedido nÃ£o encontrado"));
+                        new PedidoNaoEncontradoException("Pedido não encontrado"));
 
         pedidoRepository.delete(pedido);
 
-        log.info("Pedido excluÃ­do com sucesso. id={}", id);
+        log.info("Pedido excluído com sucesso. id={}", id);
     }
 
     private Long obterClienteIdDoUsuarioLogado() {
@@ -351,7 +351,7 @@ public class PedidoService {
 
         Usuario usuario = usuarioRepository.findById(usuarioId)
                 .orElseThrow(() -> new IllegalStateException(
-                        "UsuÃ¡rio autenticado nÃ£o encontrado"));
+                        "Usuário autenticado não encontrado"));
 
         return usuario.getClienteId();
     }
