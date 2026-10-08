@@ -1,4 +1,4 @@
-﻿package br.com.raizesdonordeste.backend.dto.request;
+package br.com.raizesdonordeste.backend.dto.request;
 
 import jakarta.validation.constraints.*;
 

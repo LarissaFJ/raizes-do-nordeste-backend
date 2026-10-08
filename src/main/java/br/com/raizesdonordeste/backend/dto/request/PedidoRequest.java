@@ -22,7 +22,7 @@ public class PedidoRequest {
     private Long unidadeId;
     @NotNull(message = "Campo obrigatório")
     private CanalPedido canalPedido;
-    @DecimalMin("0.00", message = "O valor está abaixo do mínimo permitido")
+    @DecimalMin(value = "0.00", message = "O valor está abaixo do mínimo permitido")
     private BigDecimal desconto;
     @NotEmpty(message = "A lista não pode estar vazia")
     @Valid

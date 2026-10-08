@@ -17,7 +17,7 @@ public class PedidoAtualizacaoRequest {
     private CanalPedido canalPedido;
     @Pattern(regexp = "PENDENTE|CONFIRMADO|CANCELADO", message = "Status do pedido inválido")
     private String statusPedido;
-    @DecimalMin("0.00", message = "O valor está abaixo do mínimo permitido")
+    @DecimalMin(value = "0.00", message = "O valor está abaixo do mínimo permitido")
     private BigDecimal desconto;
 
 }
