@@ -1,5 +1,7 @@
 package br.com.raizesdonordeste.backend.controller;
 
+import jakarta.validation.Valid;
+
 import br.com.raizesdonordeste.backend.dto.request.UnidadeAtualizacaoRequest;
 import br.com.raizesdonordeste.backend.dto.request.UnidadeRequest;
 import br.com.raizesdonordeste.backend.dto.response.UnidadeResponse;
@@ -29,7 +31,7 @@ public class UnidadeController {
     @SecurityRequirement(name = "bearerAuth")
     @PostMapping
     public ResponseEntity<UnidadeResponse> cadastrar(
-            @RequestBody UnidadeRequest request) {
+            @RequestBody @Valid UnidadeRequest request) {
 
         UnidadeResponse response = unidadeService.cadastrar(request);
 
@@ -53,7 +55,7 @@ public class UnidadeController {
     @PatchMapping("/{id}")
     public ResponseEntity<UnidadeResponse> atualizar(
             @PathVariable Long id,
-            @RequestBody UnidadeAtualizacaoRequest request) {
+            @RequestBody @Valid UnidadeAtualizacaoRequest request) {
 
         return ResponseEntity.ok(
                 unidadeService.atualizar(id, request)

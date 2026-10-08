@@ -1,5 +1,7 @@
 package br.com.raizesdonordeste.backend.controller;
 
+import jakarta.validation.Valid;
+
 import br.com.raizesdonordeste.backend.dto.request.ProdutoAtualizacaoRequest;
 import br.com.raizesdonordeste.backend.dto.request.ProdutoRequest;
 import br.com.raizesdonordeste.backend.dto.response.ProdutoResponse;
@@ -29,7 +31,7 @@ public class ProdutoController {
     @SecurityRequirement(name = "bearerAuth")
     @PostMapping
     public ResponseEntity<ProdutoResponse> cadastrar(
-            @RequestBody ProdutoRequest request) {
+            @RequestBody @Valid ProdutoRequest request) {
 
         return ResponseEntity
                 .status(HttpStatus.CREATED)
@@ -53,7 +55,7 @@ public class ProdutoController {
     @PatchMapping("/{id}")
     public ResponseEntity<ProdutoResponse> atualizar(
             @PathVariable Long id,
-            @RequestBody ProdutoAtualizacaoRequest request) {
+            @RequestBody @Valid ProdutoAtualizacaoRequest request) {
 
         return ResponseEntity.ok(
                 produtoService.atualizar(id, request)

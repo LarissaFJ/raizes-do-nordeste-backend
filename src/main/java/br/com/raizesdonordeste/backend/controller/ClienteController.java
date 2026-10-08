@@ -1,5 +1,7 @@
 package br.com.raizesdonordeste.backend.controller;
 
+import jakarta.validation.Valid;
+
 import br.com.raizesdonordeste.backend.dto.request.ClienteAtualizacaoRequest;
 import br.com.raizesdonordeste.backend.dto.response.ClienteResponse;
 import br.com.raizesdonordeste.backend.service.ClienteService;
@@ -40,7 +42,7 @@ public class ClienteController {
     @PatchMapping("/{id}")
     public ResponseEntity<ClienteResponse> atualizar(
             @PathVariable Long id,
-            @RequestBody ClienteAtualizacaoRequest request) {
+            @RequestBody @Valid ClienteAtualizacaoRequest request) {
 
         return ResponseEntity.ok(
                 clienteService.atualizar(id, request)

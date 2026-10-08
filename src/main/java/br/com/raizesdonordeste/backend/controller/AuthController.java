@@ -4,6 +4,7 @@ import br.com.raizesdonordeste.backend.dto.request.AuthCadastroRequest;
 import br.com.raizesdonordeste.backend.dto.request.AuthLoginRequest;
 import br.com.raizesdonordeste.backend.dto.response.AuthResponse;
 import br.com.raizesdonordeste.backend.service.AuthService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -20,7 +21,8 @@ public class AuthController {
     private final AuthService authService;
 
     @PostMapping("/cadastro")
-    public ResponseEntity<?> cadastrar(@RequestBody AuthCadastroRequest request) {
+    public ResponseEntity<?> cadastrar(@RequestBody @Valid
+                                           AuthCadastroRequest request) {
         try {
             return ResponseEntity.ok(authService.cadastrar(request));
         } catch (ResponseStatusException exception) {
@@ -31,7 +33,7 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<AuthResponse> login(@RequestBody AuthLoginRequest request) {
+    public ResponseEntity<AuthResponse> login(@RequestBody @Valid AuthLoginRequest request) {
         return ResponseEntity.ok(authService.login(request));
     }
 }

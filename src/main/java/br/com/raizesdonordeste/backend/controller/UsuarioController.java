@@ -1,5 +1,7 @@
 package br.com.raizesdonordeste.backend.controller;
 
+import jakarta.validation.Valid;
+
 import br.com.raizesdonordeste.backend.dto.request.UsuarioRequest;
 import br.com.raizesdonordeste.backend.dto.response.UsuarioResponse;
 import br.com.raizesdonordeste.backend.service.UsuarioService;
@@ -28,7 +30,7 @@ public class UsuarioController {
     }
 
     @PostMapping
-    public ResponseEntity<Void> cadastrar(@RequestBody UsuarioRequest request) {
+    public ResponseEntity<Void> cadastrar(@RequestBody @Valid UsuarioRequest request) {
         usuarioService.cadastrar(request);
         return ResponseEntity.status(201).build();
     }

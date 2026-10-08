@@ -1,5 +1,7 @@
 package br.com.raizesdonordeste.backend.controller;
 
+import jakarta.validation.Valid;
+
 import br.com.raizesdonordeste.backend.dto.request.PagamentoRequest;
 import br.com.raizesdonordeste.backend.dto.response.PagamentoResponse;
 import br.com.raizesdonordeste.backend.service.PagamentoService;
@@ -27,7 +29,7 @@ public class PagamentoController {
 
     @PostMapping
     public ResponseEntity<PagamentoResponse> cadastrar(
-            @RequestBody PagamentoRequest request) {
+            @RequestBody @Valid PagamentoRequest request) {
 
         return ResponseEntity
                 .status(HttpStatus.CREATED)

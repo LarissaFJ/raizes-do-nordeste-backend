@@ -1,5 +1,7 @@
 package br.com.raizesdonordeste.backend.controller;
 
+import jakarta.validation.Valid;
+
 import br.com.raizesdonordeste.backend.dto.request.PedidoAtualizacaoRequest;
 import br.com.raizesdonordeste.backend.dto.request.PedidoRequest;
 import br.com.raizesdonordeste.backend.dto.response.PedidoResponse;
@@ -31,7 +33,7 @@ public class PedidoController {
 
     @PostMapping
     public ResponseEntity<PedidoResponse> cadastrar(
-            @RequestBody PedidoRequest request) {
+            @RequestBody @Valid PedidoRequest request) {
 
         return ResponseEntity
                 .status(HttpStatus.CREATED)
@@ -55,7 +57,7 @@ public class PedidoController {
     @PatchMapping("/{id}")
     public ResponseEntity<PedidoResponse> atualizar(
             @PathVariable Long id,
-            @RequestBody PedidoAtualizacaoRequest request) {
+            @RequestBody @Valid PedidoAtualizacaoRequest request) {
 
         return ResponseEntity.ok(
                 pedidoService.atualizar(id, request)

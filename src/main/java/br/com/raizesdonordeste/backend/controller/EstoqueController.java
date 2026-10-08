@@ -1,5 +1,7 @@
 package br.com.raizesdonordeste.backend.controller;
 
+import jakarta.validation.Valid;
+
 import br.com.raizesdonordeste.backend.dto.request.EstoqueAtualizacaoRequest;
 import br.com.raizesdonordeste.backend.dto.request.EstoqueRequest;
 import br.com.raizesdonordeste.backend.dto.response.EstoqueResponse;
@@ -29,7 +31,7 @@ public class EstoqueController {
 
     @PostMapping
     public ResponseEntity<EstoqueResponse> cadastrar(
-            @RequestBody EstoqueRequest request) {
+            @RequestBody @Valid EstoqueRequest request) {
 
         return ResponseEntity
                 .status(HttpStatus.CREATED)
@@ -52,7 +54,7 @@ public class EstoqueController {
     @PatchMapping("/{id}")
     public ResponseEntity<EstoqueResponse> atualizar(
             @PathVariable Long id,
-            @RequestBody EstoqueAtualizacaoRequest request) {
+            @RequestBody @Valid EstoqueAtualizacaoRequest request) {
 
         return ResponseEntity.ok(
                 estoqueService.atualizar(id, request)
