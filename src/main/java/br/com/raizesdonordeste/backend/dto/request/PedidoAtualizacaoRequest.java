@@ -12,12 +12,12 @@ import java.math.BigDecimal;
 @Setter
 public class PedidoAtualizacaoRequest {
 
-    @Positive
+    @Positive(message = "O valor deve ser maior que zero")
     private Long unidadeId;
     private CanalPedido canalPedido;
-    @Pattern(regexp = "PENDENTE|CONFIRMADO|CANCELADO")
+    @Pattern(regexp = "PENDENTE|CONFIRMADO|CANCELADO", message = "Status do pedido inválido")
     private String statusPedido;
-    @DecimalMin("0.00")
+    @DecimalMin("0.00", message = "O valor está abaixo do mínimo permitido")
     private BigDecimal desconto;
 
 }

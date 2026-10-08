@@ -14,14 +14,14 @@ import java.math.BigDecimal;
 @Setter
 public class PagamentoRequest {
 
-    @NotNull
-    @Positive
+    @NotNull(message = "Campo obrigatório")
+    @Positive(message = "O valor deve ser maior que zero")
     private Long pedidoId;
 
     @Enumerated(EnumType.STRING)
-    @NotNull
+    @NotNull(message = "Campo obrigatório")
     private FormaPagamento formaPagamento;
-    @NotNull
-    @Positive
+    @NotNull(message = "Campo obrigatório")
+    @Positive(message = "O valor deve ser maior que zero")
     private BigDecimal valor;
 }

@@ -10,13 +10,13 @@ import lombok.Setter;
 @Setter
 public class UsuarioRequest {
 
-    @NotBlank
-    @Email
-    @Size(max = 255)
+    @NotBlank(message = "Campo obrigatório")
+    @Email(message = "E-mail deve ser válido")
+    @Size(max = 255, message = "O campo deve ter no máximo 255 caracteres")
     private String email;
-    @NotBlank
+    @NotBlank(message = "Campo obrigatório")
     private String senha;
-    @NotNull
+    @NotNull(message = "Campo obrigatório")
     private Role role;
 
 }

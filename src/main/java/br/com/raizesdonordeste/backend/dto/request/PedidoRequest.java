@@ -15,16 +15,16 @@ import java.util.List;
 @Setter
 public class PedidoRequest {
 
-    @Positive
+    @Positive(message = "O valor deve ser maior que zero")
     private Long clienteId;
-    @NotNull
-    @Positive
+    @NotNull(message = "Campo obrigatório")
+    @Positive(message = "O valor deve ser maior que zero")
     private Long unidadeId;
-    @NotNull
+    @NotNull(message = "Campo obrigatório")
     private CanalPedido canalPedido;
-    @DecimalMin("0.00")
+    @DecimalMin("0.00", message = "O valor está abaixo do mínimo permitido")
     private BigDecimal desconto;
-    @NotEmpty
+    @NotEmpty(message = "A lista não pode estar vazia")
     @Valid
     private List<ItemPedidoRequest> itens;
 }

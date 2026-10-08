@@ -9,16 +9,16 @@ import lombok.Setter;
 @Setter
 public class UnidadeRequest {
 
-    @NotBlank
-    @Size(max = 255)
+    @NotBlank(message = "Campo obrigatório")
+    @Size(max = 255, message = "O campo deve ter no máximo 255 caracteres")
     private String nome;
-    @NotBlank
-    @Size(max = 255)
+    @NotBlank(message = "Campo obrigatório")
+    @Size(max = 255, message = "O campo deve ter no máximo 255 caracteres")
     private String endereco;
-    @NotBlank
-    @Size(max = 255)
+    @NotBlank(message = "Campo obrigatório")
+    @Size(max = 255, message = "O campo deve ter no máximo 255 caracteres")
     private String cidade;
-    @NotBlank
-    @Size(max = 255)
+    @NotBlank(message = "Campo obrigatório")
+    @Size(max = 255, message = "O campo deve ter no máximo 255 caracteres")
     private String estado;
 }

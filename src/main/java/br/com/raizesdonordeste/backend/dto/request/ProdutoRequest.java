@@ -11,13 +11,13 @@ import java.math.BigDecimal;
 @Setter
 public class ProdutoRequest {
 
-    @NotBlank
-    @Size(max = 255)
+    @NotBlank(message = "Campo obrigatório")
+    @Size(max = 255, message = "O campo deve ter no máximo 255 caracteres")
     private String nome;
-    @Size(max = 255)
+    @Size(max = 255, message = "O campo deve ter no máximo 255 caracteres")
     private String descricao;
-    @NotNull
-    @Positive
+    @NotNull(message = "Campo obrigatório")
+    @Positive(message = "O valor deve ser maior que zero")
     private BigDecimal preco;
     private Boolean ativo;
 

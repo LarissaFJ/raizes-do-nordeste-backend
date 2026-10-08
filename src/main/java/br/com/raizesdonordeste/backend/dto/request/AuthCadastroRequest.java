@@ -9,19 +9,19 @@ import lombok.Setter;
 @Setter
 public class AuthCadastroRequest {
     @NotBlank(message = "Nome não pode ser vazio")
-    @Size(max = 255)
+    @Size(max = 255, message = "O campo deve ter no máximo 255 caracteres")
     private String nome;
-    @NotBlank
+    @NotBlank(message = "Campo obrigatório")
     @Pattern(regexp = "\\d{11}", message = "CPF deve conter 11 dígitos")
     private String cpf;
-    @NotBlank
-    @Email
-    @Size(max = 255)
+    @NotBlank(message = "Campo obrigatório")
+    @Email(message = "E-mail deve ser válido")
+    @Size(max = 255, message = "O campo deve ter no máximo 255 caracteres")
     private String email;
-    @NotBlank
-    @Pattern(regexp = "\\d{10,11}")
+    @NotBlank(message = "Campo obrigatório")
+    @Pattern(regexp = "\\d{10,11}", message = "Telefone deve conter 10 ou 11 dígitos")
     private String telefone;
-    @NotBlank
+    @NotBlank(message = "Campo obrigatório")
     private String senha;
     @AssertTrue(message = "O consentimento para tratamento de dados é obrigatório")
     private boolean consentimentoLgpd;

@@ -11,12 +11,12 @@ import java.math.BigDecimal;
 @Setter
 public class ProdutoAtualizacaoRequest {
 
-    @Pattern(regexp = "(?s).*\\S.*")
-    @Size(max = 255)
+    @Pattern(regexp = "(?s).*\\S.*", message = "O formato do campo é inválido")
+    @Size(max = 255, message = "O campo deve ter no máximo 255 caracteres")
     private String nome;
-    @Size(max = 255)
+    @Size(max = 255, message = "O campo deve ter no máximo 255 caracteres")
     private String descricao;
-    @Positive
+    @Positive(message = "O valor deve ser maior que zero")
     private BigDecimal preco;
     private Boolean ativo;
 }

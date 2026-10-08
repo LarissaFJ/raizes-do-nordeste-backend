@@ -9,10 +9,10 @@ import lombok.Setter;
 @Setter
 public class EstoqueAtualizacaoRequest {
 
-    @Positive
+    @Positive(message = "O valor deve ser maior que zero")
     private Long unidadeId;
-    @Positive
+    @Positive(message = "O valor deve ser maior que zero")
     private Long produtoId;
-    @PositiveOrZero
+    @PositiveOrZero(message = "O valor não pode ser negativo")
     private Integer quantidade;
 }

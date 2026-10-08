@@ -11,10 +11,10 @@ import java.math.BigDecimal;
 @Setter
 public class PagamentoAtualizacaoRequest {
 
-    @Pattern(regexp = "(?s).*\\S.*")
+    @Pattern(regexp = "(?s).*\\S.*", message = "O formato do campo é inválido")
     private String formaPagamento;
-    @Positive
+    @Positive(message = "O valor deve ser maior que zero")
     private BigDecimal valor;
-    @Pattern(regexp = "(?s).*\\S.*")
+    @Pattern(regexp = "(?s).*\\S.*", message = "O formato do campo é inválido")
     private String status;
 }

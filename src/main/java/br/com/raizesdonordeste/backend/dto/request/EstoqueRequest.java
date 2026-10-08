@@ -9,13 +9,13 @@ import lombok.Setter;
 @Setter
 public class EstoqueRequest {
 
-    @NotNull
-    @Positive
+    @NotNull(message = "Campo obrigatório")
+    @Positive(message = "O valor deve ser maior que zero")
     private Long unidadeId;
-    @NotNull
-    @Positive
+    @NotNull(message = "Campo obrigatório")
+    @Positive(message = "O valor deve ser maior que zero")
     private Long produtoId;
-    @NotNull
-    @PositiveOrZero
+    @NotNull(message = "Campo obrigatório")
+    @PositiveOrZero(message = "O valor não pode ser negativo")
     private Integer quantidade;
 }

@@ -9,11 +9,11 @@ import lombok.Setter;
 @Setter
 public class ItemPedidoRequest {
 
-    @NotNull
-    @Positive
+    @NotNull(message = "Campo obrigatório")
+    @Positive(message = "O valor deve ser maior que zero")
     private Long produtoId;
-    @NotNull
-    @Positive
+    @NotNull(message = "Campo obrigatório")
+    @Positive(message = "O valor deve ser maior que zero")
     private Integer quantidade;
 
 }
