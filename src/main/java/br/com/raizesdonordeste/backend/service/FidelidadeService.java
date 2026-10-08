@@ -4,14 +4,13 @@ import br.com.raizesdonordeste.backend.dto.response.FidelidadeResponse;
 import br.com.raizesdonordeste.backend.entity.Cliente;
 import br.com.raizesdonordeste.backend.entity.Usuario;
 import br.com.raizesdonordeste.backend.exception.ClienteNaoEncontradoException;
+import br.com.raizesdonordeste.backend.exception.FidelidadeAcessoNegadoException;
 import br.com.raizesdonordeste.backend.repository.ClienteRepository;
 import br.com.raizesdonordeste.backend.repository.UsuarioRepository;
-import org.springframework.http.HttpStatus;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.web.server.ResponseStatusException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -42,9 +41,7 @@ public class FidelidadeService {
                             "Usuário autenticado não encontrado"));
 
             if (!java.util.Objects.equals(usuario.getClienteId(), clienteId)) {
-                throw new ResponseStatusException(
-                        HttpStatus.FORBIDDEN,
-                        "Você não tem acesso a esta fidelidade");
+                throw new FidelidadeAcessoNegadoException("Acesso negado a esta fidelidade");
             }
         }
 

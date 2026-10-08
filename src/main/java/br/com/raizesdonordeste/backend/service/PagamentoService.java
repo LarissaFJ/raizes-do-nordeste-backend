@@ -77,7 +77,7 @@ public class PagamentoService {
                     pedido.getClienteId())) {
                 throw new ResponseStatusException(
                         HttpStatus.FORBIDDEN,
-                        "Voc� n�o tem acesso a este pedido");
+                        "Você não tem acesso a este pedido");
             }
         }
 
@@ -201,7 +201,7 @@ public class PagamentoService {
                 pagamento, obterClienteIdDoUsuario(authentication))) {
             throw new ResponseStatusException(
                     HttpStatus.FORBIDDEN,
-                    "Voc� n�o tem acesso a este pagamento");
+                    "Você não tem acesso a este pagamento");
         }
         log.info("Pagamento consultado. id={}", id);
 
@@ -223,7 +223,7 @@ public class PagamentoService {
         Long usuarioId = Long.valueOf(authentication.getName());
         Usuario usuario = usuarioRepository.findById(usuarioId)
                 .orElseThrow(() -> new IllegalStateException(
-                        "Usu�rio autenticado n�o encontrado"));
+                        "Usuário autenticado não encontrado"));
         return usuario.getClienteId();
     }
 

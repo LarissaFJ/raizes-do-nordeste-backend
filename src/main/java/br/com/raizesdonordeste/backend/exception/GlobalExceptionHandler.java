@@ -50,6 +50,11 @@ public class GlobalExceptionHandler {
                 .body(exception.getMessage());
     }
 
+    @ExceptionHandler(FidelidadeAcessoNegadoException.class)
+    public ResponseEntity<Void> tratarAcessoFidelidade(FidelidadeAcessoNegadoException exception) {
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+    }
+
     @ExceptionHandler(CredenciaisInvalidasException.class)
     public ResponseEntity<String> tratarCredenciaisInvalidas(CredenciaisInvalidasException exception) {
         return ResponseEntity
