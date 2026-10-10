@@ -1,0 +1,1304 @@
+{
+  "info": {
+    "_postman_id": "4d79619f-e604-48e2-bbba-e2037b63664a",
+    "name": "Projeto Final",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "41331719"
+  },
+  "item": [
+    {
+      "name": "Clientes",
+      "item": [
+        {
+          "name": "Listar",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "https://raizes-do-nordeste-backend-aayl.onrender.com/clientes",
+              "protocol": "https",
+              "host": [
+                "raizes-do-nordeste-backend-aayl",
+                "onrender",
+                "com"
+              ],
+              "path": [
+                "clientes"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "BuscarPorId",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "https://raizes-do-nordeste-backend-aayl.onrender.com/clientes/6",
+              "protocol": "https",
+              "host": [
+                "raizes-do-nordeste-backend-aayl",
+                "onrender",
+                "com"
+              ],
+              "path": [
+                "clientes",
+                "6"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Atualizar",
+          "request": {
+            "method": "PATCH",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"nome\": \"Eduarda Silva da Silva\",\r\n  \"cpf\": \"12345678901\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "https://raizes-do-nordeste-backend-aayl.onrender.com/clientes/3",
+              "protocol": "https",
+              "host": [
+                "raizes-do-nordeste-backend-aayl",
+                "onrender",
+                "com"
+              ],
+              "path": [
+                "clientes",
+                "3"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Deletar",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "https://raizes-do-nordeste-backend-aayl.onrender.com/clientes/1",
+              "protocol": "https",
+              "host": [
+                "raizes-do-nordeste-backend-aayl",
+                "onrender",
+                "com"
+              ],
+              "path": [
+                "clientes",
+                "1"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Unidades",
+      "item": [
+        {
+          "name": "Cadastrar",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"nome\": \"Unidade Porto Alegre\",\r\n  \"endereco\": \"Rua Dr Flores, 100\",\r\n  \"cidade\": \"Porto Alegre\",\r\n  \"estado\": \"RS\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "https://raizes-do-nordeste-backend-aayl.onrender.com/unidades",
+              "protocol": "https",
+              "host": [
+                "raizes-do-nordeste-backend-aayl",
+                "onrender",
+                "com"
+              ],
+              "path": [
+                "unidades"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Listar",
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "https://raizes-do-nordeste-backend-aayl.onrender.com/unidades",
+              "protocol": "https",
+              "host": [
+                "raizes-do-nordeste-backend-aayl",
+                "onrender",
+                "com"
+              ],
+              "path": [
+                "unidades"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "BuscarPorId",
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "https://raizes-do-nordeste-backend-aayl.onrender.com/unidades/2",
+              "protocol": "https",
+              "host": [
+                "raizes-do-nordeste-backend-aayl",
+                "onrender",
+                "com"
+              ],
+              "path": [
+                "unidades",
+                "2"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Atualizar",
+          "request": {
+            "method": "PATCH",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n\r\n    \"endereco\": \"Rua Dr Flores, 101\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "https://raizes-do-nordeste-backend-aayl.onrender.com/unidades/6",
+              "protocol": "https",
+              "host": [
+                "raizes-do-nordeste-backend-aayl",
+                "onrender",
+                "com"
+              ],
+              "path": [
+                "unidades",
+                "6"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Deletar",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "https://raizes-do-nordeste-backend-aayl.onrender.com/unidades/3",
+              "protocol": "https",
+              "host": [
+                "raizes-do-nordeste-backend-aayl",
+                "onrender",
+                "com"
+              ],
+              "path": [
+                "unidades",
+                "3"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Produtos",
+      "item": [
+        {
+          "name": "Cadastrar",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"nome\": \"Produto Teste Estoque Zero\",\r\n  \"descricao\": \"Produto criado para teste de estoque insuficiente\",\r\n  \"preco\": 10.00\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "https://raizes-do-nordeste-backend-aayl.onrender.com/produtos",
+              "protocol": "https",
+              "host": [
+                "raizes-do-nordeste-backend-aayl",
+                "onrender",
+                "com"
+              ],
+              "path": [
+                "produtos"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Listar",
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "https://raizes-do-nordeste-backend-aayl.onrender.com/produtos",
+              "protocol": "https",
+              "host": [
+                "raizes-do-nordeste-backend-aayl",
+                "onrender",
+                "com"
+              ],
+              "path": [
+                "produtos"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "BuscarPorId",
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "https://raizes-do-nordeste-backend-aayl.onrender.com/produtos/2",
+              "protocol": "https",
+              "host": [
+                "raizes-do-nordeste-backend-aayl",
+                "onrender",
+                "com"
+              ],
+              "path": [
+                "produtos",
+                "2"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Atualizar",
+          "request": {
+            "method": "PATCH",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"preco\": 18.90\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "https://raizes-do-nordeste-backend-aayl.onrender.com/produtos/9",
+              "protocol": "https",
+              "host": [
+                "raizes-do-nordeste-backend-aayl",
+                "onrender",
+                "com"
+              ],
+              "path": [
+                "produtos",
+                "9"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Deletar",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "https://raizes-do-nordeste-backend-aayl.onrender.com/produtos/5",
+              "protocol": "https",
+              "host": [
+                "raizes-do-nordeste-backend-aayl",
+                "onrender",
+                "com"
+              ],
+              "path": [
+                "produtos",
+                "5"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Estoques",
+      "item": [
+        {
+          "name": "Cadastrar",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"unidadeId\": 1,\r\n  \"produtoId\": 7,\r\n  \"quantidade\": 0\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "https://raizes-do-nordeste-backend-aayl.onrender.com/estoques",
+              "protocol": "https",
+              "host": [
+                "raizes-do-nordeste-backend-aayl",
+                "onrender",
+                "com"
+              ],
+              "path": [
+                "estoques"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Listar",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "https://raizes-do-nordeste-backend-aayl.onrender.com/estoques",
+              "protocol": "https",
+              "host": [
+                "raizes-do-nordeste-backend-aayl",
+                "onrender",
+                "com"
+              ],
+              "path": [
+                "estoques"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "BuscarPorId",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "https://raizes-do-nordeste-backend-aayl.onrender.com/estoques/2",
+              "protocol": "https",
+              "host": [
+                "raizes-do-nordeste-backend-aayl",
+                "onrender",
+                "com"
+              ],
+              "path": [
+                "estoques",
+                "2"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Atualizar",
+          "request": {
+            "method": "PATCH",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"quantidade\": 55\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "https://raizes-do-nordeste-backend-aayl.onrender.com/estoques/7",
+              "protocol": "https",
+              "host": [
+                "raizes-do-nordeste-backend-aayl",
+                "onrender",
+                "com"
+              ],
+              "path": [
+                "estoques",
+                "7"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Deletar",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "https://raizes-do-nordeste-backend-aayl.onrender.com/estoques/5",
+              "protocol": "https",
+              "host": [
+                "raizes-do-nordeste-backend-aayl",
+                "onrender",
+                "com"
+              ],
+              "path": [
+                "estoques",
+                "5"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Pedidos",
+      "item": [
+        {
+          "name": "Cadastrar",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"clienteId\": 6,\r\n  \"unidadeId\": 1,\r\n  \"canalPedido\": \"WEB\",\r\n  \"desconto\": 0,\r\n  \"itens\": [\r\n    {\r\n      \"produtoId\": 8,\r\n      \"quantidade\": 1\r\n    }\r\n  ]\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "https://raizes-do-nordeste-backend-aayl.onrender.com/pedidos",
+              "protocol": "https",
+              "host": [
+                "raizes-do-nordeste-backend-aayl",
+                "onrender",
+                "com"
+              ],
+              "path": [
+                "pedidos"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Cadastrar com dado invalido",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"clienteId\": 6,\r\n  \"unidadeId\": 1,\r\n  \"canalPedido\": \"WEB\",\r\n  \"desconto\": 0,\r\n  \"itens\": [\r\n    {\r\n      \"produtoId\": 8,\r\n      \"quantidade\": \"abc\"\r\n    }\r\n  ]\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "https://raizes-do-nordeste-backend-aayl.onrender.com/pedidos",
+              "protocol": "https",
+              "host": [
+                "raizes-do-nordeste-backend-aayl",
+                "onrender",
+                "com"
+              ],
+              "path": [
+                "pedidos"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Listar",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "https://raizes-do-nordeste-backend-aayl.onrender.com/pedidos",
+              "protocol": "https",
+              "host": [
+                "raizes-do-nordeste-backend-aayl",
+                "onrender",
+                "com"
+              ],
+              "path": [
+                "pedidos"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Listar Sem Autenticacao",
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "https://raizes-do-nordeste-backend-aayl.onrender.com/pedidos",
+              "protocol": "https",
+              "host": [
+                "raizes-do-nordeste-backend-aayl",
+                "onrender",
+                "com"
+              ],
+              "path": [
+                "pedidos"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "BuscarPorId",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "https://raizes-do-nordeste-backend-aayl.onrender.com/pedidos/1",
+              "protocol": "https",
+              "host": [
+                "raizes-do-nordeste-backend-aayl",
+                "onrender",
+                "com"
+              ],
+              "path": [
+                "pedidos",
+                "1"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Atualizar",
+          "request": {
+            "method": "PATCH",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"unidadeId\": 1,\r\n  \"canalPedido\": \"APP\",\r\n  \"statusPedido\": \"PENDENTE\"\r\n}\r\n",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "https://raizes-do-nordeste-backend-aayl.onrender.com/pedidos/2",
+              "protocol": "https",
+              "host": [
+                "raizes-do-nordeste-backend-aayl",
+                "onrender",
+                "com"
+              ],
+              "path": [
+                "pedidos",
+                "2"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Deletar",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "https://raizes-do-nordeste-backend-aayl.onrender.com/pedidos/1",
+              "protocol": "https",
+              "host": [
+                "raizes-do-nordeste-backend-aayl",
+                "onrender",
+                "com"
+              ],
+              "path": [
+                "pedidos",
+                "1"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Pagamentos",
+      "item": [
+        {
+          "name": "Cadastrar",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"pedidoId\": 3,\r\n  \"formaPagamento\": \"DINHEIRO\",\r\n  \"valor\": 24.60\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "https://raizes-do-nordeste-backend-aayl.onrender.com/pagamentos",
+              "protocol": "https",
+              "host": [
+                "raizes-do-nordeste-backend-aayl",
+                "onrender",
+                "com"
+              ],
+              "path": [
+                "pagamentos"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Listar",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "https://raizes-do-nordeste-backend-aayl.onrender.com/pagamentos",
+              "protocol": "https",
+              "host": [
+                "raizes-do-nordeste-backend-aayl",
+                "onrender",
+                "com"
+              ],
+              "path": [
+                "pagamentos"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "BuscarPorId",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "https://raizes-do-nordeste-backend-aayl.onrender.com/pagamentos/1",
+              "protocol": "https",
+              "host": [
+                "raizes-do-nordeste-backend-aayl",
+                "onrender",
+                "com"
+              ],
+              "path": [
+                "pagamentos",
+                "1"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Deletar",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8080/pagamentos/1",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "pagamentos",
+                "1"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Auditorias",
+      "item": [
+        {
+          "name": "Registrar",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"pedidoId\": 1,\r\n  \"tipoOperacao\": \"ALTERACAO_DESCONTO\",\r\n  \"descricao\": \"Desconto do pedido alterado\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "https://raizes-do-nordeste-backend-aayl.onrender.com/auditorias",
+              "protocol": "https",
+              "host": [
+                "raizes-do-nordeste-backend-aayl",
+                "onrender",
+                "com"
+              ],
+              "path": [
+                "auditorias"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Listar",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "https://raizes-do-nordeste-backend-aayl.onrender.com/auditorias",
+              "protocol": "https",
+              "host": [
+                "raizes-do-nordeste-backend-aayl",
+                "onrender",
+                "com"
+              ],
+              "path": [
+                "auditorias"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "BuscarPorId",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "https://raizes-do-nordeste-backend-aayl.onrender.com/auditorias/7",
+              "protocol": "https",
+              "host": [
+                "raizes-do-nordeste-backend-aayl",
+                "onrender",
+                "com"
+              ],
+              "path": [
+                "auditorias",
+                "7"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Fidelidade",
+      "item": [
+        {
+          "name": "BuscarPorClienteId",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "https://raizes-do-nordeste-backend-aayl.onrender.com/fidelidade/1",
+              "protocol": "https",
+              "host": [
+                "raizes-do-nordeste-backend-aayl",
+                "onrender",
+                "com"
+              ],
+              "path": [
+                "fidelidade",
+                "1"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Auth",
+      "item": [
+        {
+          "name": "Cadastrar Cliente com Campo Ausente",
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"nome\": \"Cliente Campo Ausente\",\r\n  \"cpf\": \"00987654323\",\r\n  \"telefone\": \"51966666666\",\r\n  \"senha\": \"123456\",\r\n  \"consentimentoLgpd\":true\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "https://raizes-do-nordeste-backend-aayl.onrender.com/auth/cadastro",
+              "protocol": "https",
+              "host": [
+                "raizes-do-nordeste-backend-aayl",
+                "onrender",
+                "com"
+              ],
+              "path": [
+                "auth",
+                "cadastro"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Cadastrar Cliente sem Consentimento LGPD",
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"nome\": \"Cliente Teste LGPD\",\r\n  \"cpf\": \"00987654321\",\r\n  \"email\": \"clienteteste.lgpd@gmail.com\",\r\n  \"telefone\": \"51988888888\",\r\n  \"senha\": \"123456\",\r\n  \"consentimentoLgpd\": false\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "https://raizes-do-nordeste-backend-aayl.onrender.com/auth/cadastro",
+              "protocol": "https",
+              "host": [
+                "raizes-do-nordeste-backend-aayl",
+                "onrender",
+                "com"
+              ],
+              "path": [
+                "auth",
+                "cadastro"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Cadastrar Cliente",
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"nome\": \"Cliente Teste\",\r\n  \"cpf\": \"12345678902\",\r\n  \"email\": \"cliente.teste@teste.com\",\r\n  \"telefone\": \"51988887777\",\r\n  \"senha\": \"Teste@2026\",\r\n  \"consentimentoLgpd\": true\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "https://raizes-do-nordeste-backend-aayl.onrender.com/auth/cadastro",
+              "protocol": "https",
+              "host": [
+                "raizes-do-nordeste-backend-aayl",
+                "onrender",
+                "com"
+              ],
+              "path": [
+                "auth",
+                "cadastro"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Login Admin",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const resposta = pm.response.json();\r\n\r\nif (resposta.accessToken) {\r\n    pm.collectionVariables.set(\"token\", resposta.accessToken);\r\n}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"email\": \"admin@raizes.com\",\r\n  \"senha\": \"AdminTeste@2026\"\r\n}\r\n\r\n",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "https://raizes-do-nordeste-backend-aayl.onrender.com/auth/login",
+              "protocol": "https",
+              "host": [
+                "raizes-do-nordeste-backend-aayl",
+                "onrender",
+                "com"
+              ],
+              "path": [
+                "auth",
+                "login"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Login Cliente",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const resposta = pm.response.json();\r\n\r\nif (resposta.accessToken) {\r\n    pm.collectionVariables.set(\"token\", resposta.accessToken);\r\n}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"email\": \"cliente.teste@teste.com\",\r\n  \"senha\": \"Teste@2026\"\r\n}\r\n\r\n\r\n\r\n",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "https://raizes-do-nordeste-backend-aayl.onrender.com/auth/login",
+              "protocol": "https",
+              "host": [
+                "raizes-do-nordeste-backend-aayl",
+                "onrender",
+                "com"
+              ],
+              "path": [
+                "auth",
+                "login"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Login Atendente",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const resposta = pm.response.json();\r\n\r\nif (resposta.accessToken) {\r\n    pm.collectionVariables.set(\"token\", resposta.accessToken);\r\n}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"email\": \"atendente@raizes.com\",\r\n  \"senha\": \"Atendente@2026\"\r\n}\r\n\r\n\r\n",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "https://raizes-do-nordeste-backend-aayl.onrender.com/auth/login",
+              "protocol": "https",
+              "host": [
+                "raizes-do-nordeste-backend-aayl",
+                "onrender",
+                "com"
+              ],
+              "path": [
+                "auth",
+                "login"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Usuarios",
+      "item": [
+        {
+          "name": "Cadastrar",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"email\": \"usuario.teste.atendente@raizes.com\",\r\n  \"senha\": \"UsuarioTeste@2026\",\r\n  \"role\": \"ATENDENTE\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "https://raizes-do-nordeste-backend-aayl.onrender.com/usuarios",
+              "protocol": "https",
+              "host": [
+                "raizes-do-nordeste-backend-aayl",
+                "onrender",
+                "com"
+              ],
+              "path": [
+                "usuarios"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Listar",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "method": "GET",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://raizes-do-nordeste-backend-aayl.onrender.com/usuarios",
+              "protocol": "http",
+              "host": [
+                "raizes-do-nordeste-backend-aayl",
+                "onrender",
+                "com"
+              ],
+              "path": [
+                "usuarios"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Smoke",
+      "request": {
+        "auth": {
+          "type": "noauth"
+        },
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "https://raizes-do-nordeste-backend-aayl.onrender.com/smoke",
+          "protocol": "https",
+          "host": [
+            "raizes-do-nordeste-backend-aayl",
+            "onrender",
+            "com"
+          ],
+          "path": [
+            "smoke"
+          ]
+        }
+      },
+      "response": []
+    }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{token}}",
+        "type": "string"
+      }
+    ]
+  },
+  "variable": [
+    {
+      "key": "json_web_token_13m2",
+      "secret": true
+    },
+    {
+      "key": "json_web_token_09vs",
+      "secret": true
+    },
+    {
+      "key": "json_web_token_14x5",
+      "secret": true
+    },
+    {
+      "key": "json_web_token_13o3",
+      "secret": true
+    },
+    {
+      "key": "json_web_token_0mj3",
+      "secret": true
+    },
+    {
+      "key": "json_web_token_0ll3",
+      "secret": true
+    },
+    {
+      "key": "json_web_token_0znx",
+      "secret": true
+    },
+    {
+      "key": "json_web_token_0xag",
+      "secret": true
+    },
+    {
+      "key": "json_web_token_0fte",
+      "secret": true
+    },
+    {
+      "key": "json_web_token_0ngj",
+      "secret": true
+    },
+    {
+      "key": "json_web_token_109r",
+      "secret": true
+    },
+    {
+      "key": "json_web_token_1bbu",
+      "secret": true
+    },
+    {
+      "key": "json_web_token_0249",
+      "secret": true
+    },
+    {
+      "key": "json_web_token_08rv",
+      "secret": true
+    },
+    {
+      "key": "json_web_token_01pg",
+      "secret": true
+    },
+    {
+      "key": "json_web_token_18ei",
+      "secret": true
+    },
+    {
+      "key": "json_web_token_13vb",
+      "secret": true
+    },
+    {
+      "key": "json_web_token_02es",
+      "secret": true
+    },
+    {
+      "key": "json_web_token_09gv",
+      "secret": true
+    },
+    {
+      "key": "json_web_token_0f8o",
+      "secret": true
+    },
+    {
+      "key": "json_web_token_118c",
+      "secret": true
+    },
+    {
+      "key": "json_web_token_03kh",
+      "secret": true
+    },
+    {
+      "key": "json_web_token_0ida",
+      "secret": true
+    },
+    {
+      "key": "token",
+      "value": ""
+    }
+  ]
+}
