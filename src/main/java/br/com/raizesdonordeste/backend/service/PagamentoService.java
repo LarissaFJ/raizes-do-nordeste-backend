@@ -14,6 +14,7 @@ import br.com.raizesdonordeste.backend.exception.EstoqueNaoEncontradoException;
 import br.com.raizesdonordeste.backend.exception.PagamentoNaoEncontradoException;
 import br.com.raizesdonordeste.backend.exception.PedidoJaConfirmadoException;
 import br.com.raizesdonordeste.backend.exception.PedidoNaoEncontradoException;
+import br.com.raizesdonordeste.backend.exception.ValorPagamentoDivergenteException;
 import br.com.raizesdonordeste.backend.gateway.GatewayPagamento;
 import br.com.raizesdonordeste.backend.repository.AuditoriaRepository;
 import br.com.raizesdonordeste.backend.repository.ClienteRepository;
@@ -83,6 +84,12 @@ public class PagamentoService {
 
         if ("CONFIRMADO".equals(pedido.getStatusPedido())) {
             throw new PedidoJaConfirmadoException("Pedido já confirmado");
+        }
+
+        if (pedido.getValorTotal() == null
+                || request.getValor().compareTo(pedido.getValorTotal()) != 0) {
+            throw new ValorPagamentoDivergenteException(
+                    "O valor do pagamento deve ser igual ao valor total do pedido");
         }
 
         var resultadoPagamento = gatewayPagamento.pagar(request, pedido.getCanalPedido());

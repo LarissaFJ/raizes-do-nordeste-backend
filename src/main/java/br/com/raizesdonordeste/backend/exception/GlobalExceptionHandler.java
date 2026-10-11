@@ -58,6 +58,14 @@ public class GlobalExceptionHandler {
                 .body(exception.getMessage());
     }
 
+    @ExceptionHandler(ValorPagamentoDivergenteException.class)
+    public ResponseEntity<String> tratarValorPagamentoDivergente(
+            ValorPagamentoDivergenteException exception) {
+        return ResponseEntity
+                .status(HttpStatus.BAD_REQUEST)
+                .body(exception.getMessage());
+    }
+
     @ExceptionHandler(FidelidadeAcessoNegadoException.class)
     public ResponseEntity<Void> tratarAcessoFidelidade(FidelidadeAcessoNegadoException exception) {
         return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
